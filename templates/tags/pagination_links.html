@@ -1,0 +1,37 @@
+{% if p.has_other_pages %}
+    {% if p.has_previous %}
+        <a href="{{ request.path }}?{{ params }}&page={{ p.previous_page_number }}">
+            &laquo; Предыдущая
+        </a>
+    {% else %}
+        &laquo; Предыдущая
+    {% endif %}
+    | Страница {{ p.number }} из {{ paginator.num_pages }} |
+    {% if p.has_next %}
+        <a href="{{ request.path }}?{{ params }}&page={{ p.next_page_number }}">
+            Следующая &raquo;
+        </a>
+    {% else %}
+        Следующая &raquo;
+    {% endif %}
+{% endif %}
+
+{#Страницы:#}
+{#        {% for num in paginator.page_range %}#}
+{##}
+{#            {% if num > 2 and num < 10 or forloop.counter == 1 or forloop.revcounter == 1 %}#}
+{#                {% if forloop.revcounter == 1 and paginatorMax < forloop.counter %}#}
+{#                    ...#}
+{#                {% endif %}#}
+{#                {% ifequal num MetallCatalog.number %}#}
+{#                    <span class="current"><b>{{ num }}</b></span>#}
+{#                {% else %}#}
+{#                    <a href="/metallCatalog/{{ select_type }}/page/{{ num }}/marka/{% if filter_marka != "" %}{{ filter_marka }}{% else %} {% endif %}/gost/{% if filter_gost != "" %}{{ filter_gost }}{% else %} {% endif %}/s1/{% if s1 != "" %}{{ s1 }}{% else %}0{% endif %}/s2/{% if s2 != "" %}{{ s2 }}{% else %}0{% endif %}/s3/{% if s3 != "" %}{{ s3 }}{% else %}0{% endif %}/">{{ num }}</a>#}
+{#                    <a href="{{ request.path }}?{{ params }}&page={{ num }}"></a>#}
+{#                    #}
+{#                {% endifequal %}#}
+{#                {% if forloop.counter == 1 and paginatorMin > 2 %}#}
+{#                    ...#}
+{#                {% endif %}#}
+{#            {% endif %}#}
+{#        {% endfor %}#}

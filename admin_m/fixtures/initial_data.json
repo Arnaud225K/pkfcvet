@@ -1,0 +1,30 @@
+[
+  {
+    "model": "admin_m.StateData",
+    "pk": 1,
+    "fields": {
+      "name": "В процессе"
+    }
+  },
+  {
+    "model": "admin_m.StateData",
+    "pk": 2,
+    "fields": {
+      "name": "Завершен"
+    }
+  },
+  {
+    "model": "admin_m.StateData",
+    "pk": 3,
+    "fields": {
+      "name": "Завершен с ошибками"
+    }
+  },
+  {
+    "model": "admin_m.StateData",
+    "pk": 4,
+    "fields": {
+      "name": "Завершен с потенциальными ошибками"
+    }
+  }
+]

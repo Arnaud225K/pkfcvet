@@ -1,0 +1,139 @@
+
+<!-- Блок уведомления о файлах cookie -->
+<div class="custom-cookie-banner" id="cookie_notification_new" style="display:none;position: fixed; bottom: 0; left: 100px; max-width: 600px; background-color: #EDEDED; box-shadow: 0 0 10px rgba(0,0,0,0.1); z-index: 9999; font-family: Arial;">
+  
+    <!-- Основное сообщение -->
+    <div class="cookie-banner-content" style="padding: 20px;">
+      <div style="display:flex; align-items:center;">
+        <div class="cookie-title" style="font-family: Arial; font-size: 16px; font-weight: bold;">Управление файлами cookie</div>
+      </div>
+      <div class="cookie-text" style="font-family: Arial; font-size: 14px; margin-top:10px;">
+        Мы используем cookie-файлы для улучшения работы сайта, анализа трафика и персонализации контента. Вы можете принять все cookie или настроить их использование.
+      </div>
+      <div class="cookie-actions" style="display:flex; gap:10px; margin-top:15px;">
+        <button type="button" class="accept-all-btn cookie_accept" style="font-family: Arial; padding:10px 20px; background-color:#E84C3D; color:#fff; border:none; border-radius:4px; cursor:pointer;">Принять все</button>
+        <button type="button" class="settings-btn" style="font-family: Arial; padding:10px 20px; background-color:#d0d0d0; color:#000; border:none; border-radius:4px; cursor:pointer;">Настроить cookie</button>
+      </div>
+    </div>
+  
+    <!-- Настройки cookie (скрыты по умолчанию) -->
+    <div class="cookie-settings" style="display:none; background-color:#EDEDED;">
+      <!-- Заголовок раздела с стрелкой назад -->
+      <div class="settings-header" style="display:flex; align-items:center; padding:10px 20px;">
+        <button id="back-to-main-from-settings" style="border:none; background:none; cursor:pointer;" aria-label="Назад">
+          <svg role="presentation" xmlns="http://www.w3.org/2000/svg" width="19" height="14" viewBox="0 0 19 14" fill="none" style="margin-right:10px;">
+            <g opacity="0.5">
+              <line x1="19" y1="7" x2="1" y2="7" stroke="#000"></line>
+              <path d="M7.2069 1L1 6.89655L7.2069 12.7931" stroke="#000"></path>
+            </g>
+          </svg>
+        </button>
+        <span style="font-family:Arial;font-size:14px;font-weight:bold;">Управление файлами cookie</span>
+      </div>
+  
+      <!-- Настройки -->
+      <div class="settings-body" style="padding:20px;">
+        <!-- Обязательные cookies -->
+        <div style='margin-bottom:20px;border-bottom:1px solid #ccc;padding-bottom:10px; font-family: Arial;'>
+          <div style='display:flex; justify-content:space-between; align-items:center;'>
+            <div style='display:flex; align-items:center;'>
+              <div>Обязательные cookie</div>
+            </div>
+            <div><input type="checkbox" checked disabled style="width:16px; height:16px;"></div>
+          </div>
+          <div style='font-size:12px; margin-top:8px; color:#555;'>
+            Эти cookie необходимы для работы сайта и обеспечения его основных функций. Они всегда активны и не могут быть отключены.
+          </div>
+        </div>
+        <!-- Аналитические cookies -->
+        <div style='margin-bottom:20px;border-bottom:1px solid #ccc;padding-bottom:10px; font-family: Arial;'>
+          <div style='display:flex; justify-content:space-between; align-items:center;'>
+            <div style='display:flex; align-items:center;'>
+              <div>Аналитические cookie</div>
+            </div>
+            <div><input type="checkbox" checked style="width:16px; height:16px;"></div>
+          </div>
+          <div style='font-size:12px; margin-top:8px; color:#555;'>
+            Эти cookie помогают нам анализировать посещаемость сайта и улучшать его работу. Сбор данных осуществляется только с вашего согласия.
+          </div>
+        </div>
+        <!-- Рекламные cookies -->  
+        <div style='margin-bottom:20px;border-bottom:1px solid #ccc;padding-bottom:10px; font-family: Arial;'>
+          <div style='display:flex; justify-content:space-between; align-items:center;'>
+            <div style='display:flex; align-items:center;'>
+              <div>Рекламные cookie</div>
+            </div>
+            <div><input type="checkbox" checked style="width:16px; height:16px;"></div>
+          </div>
+          <div style='font-size:12px; margin-top:8px; color:#555;'>
+            Эти cookie используются для показа персонализированной рекламы и могут передаваться нашим рекламным партнёрам. Устанавливаются только с вашего согласия.
+          </div>
+        </div>
+        <!-- Дополнительные cookies -->
+        <div style='margin-bottom:20px;border-bottom:1px solid #ccc;padding-bottom:10px; font-family: Arial;'>
+          <div style='display:flex; justify-content:space-between; align-items:center;'>
+            <div style='display:flex; align-items:center;'>
+              <div>Дополнительные cookie</div>
+            </div>
+            <div><input type="checkbox" checked style="width:16px; height:16px;"></div>
+          </div>
+          <div style='font-size:12px; margin-top:8px; color:#555;'>
+            Эти cookie используются для дополнительных функций сайта и устанавливаются только с вашего согласия.
+          </div>
+        </div>
+      </div>
+  
+      <!-- Кнопки сохранить и закрыть настройки -->
+      <div class="" style="display:flex; gap:10px; margin-top:15px;">
+        <!-- Кнопка сохранить (закрывает окно без сообщения)-->
+        <button type='button' id='save-settings' style='font-family:Arial;padding:10px 20px;margin:0px 0px 20px 20px;background-color:#E84C3D;color:#fff;border:none;border-radius:4px;'>Сохранить настройки</button>
+      </div>
+  
+    </div>  
+  </div>
+  
+  <!-- Скрипт для переключения между блоками, возврата и закрытия -->
+  
+  <script>
+    // Показать настройки при клике на кнопку "Настроить cookie"
+    document.querySelector('.settings-btn').addEventListener('click', function() {
+        document.querySelector('.cookie-banner-content').style.display = 'none';
+        document.querySelector('.cookie-settings').style.display = 'block';
+    });
+  
+    // Возврат из настроек в основной блок
+    document.getElementById('back-to-main-from-settings').addEventListener('click', function() {
+        document.querySelector('.cookie-banner-content').style.display = 'block';
+        document.querySelector('.cookie-settings').style.display = 'none';
+    });
+  
+    // Обработка кнопки "Принять все"
+    document.querySelector('.accept-all-btn').addEventListener('click', function() {    
+        // Закрываем окно
+        document.querySelector('.custom-cookie-banner').style.display = 'none';
+    });
+  
+    // Обработка кнопки "Сохранить настройки"
+    document.getElementById('save-settings').addEventListener('click', function() {
+        localStorage.setItem( 'cookieDate', Date.now() );
+        document.querySelector('.custom-cookie-banner').style.display = 'none';
+    });
+  
+    function checkCookies(){
+        let cookieDate = localStorage.getItem('cookieDate');
+        let cookieNotification = document.getElementById('cookie_notification_new');
+        let cookieBtn = cookieNotification.querySelector('.cookie_accept');
+  
+        // Если записи про кукисы нет или она просрочена на 1 год, то показываем информацию про кукисы
+        if( !cookieDate || (+cookieDate + 31536000000) < Date.now() ){
+          document.querySelector('.custom-cookie-banner').style.display = 'block';
+        }
+  
+        // При клике на кнопку, в локальное хранилище записывается текущая дата в системе UNIX
+        cookieBtn.addEventListener('click', function(){
+            localStorage.setItem( 'cookieDate', Date.now() );
+            document.querySelector('.custom-cookie-banner').style.display = 'none';
+        })
+    }
+    checkCookies();
+  </script>

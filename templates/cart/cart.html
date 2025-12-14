@@ -1,0 +1,267 @@
+{% extends "catalog.html" %}
+{% load catalog_filters %}
+{% load checkout_tags %}
+{% block content %}
+
+
+     <!-- Order page-->
+    <div class="order-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <ol class="breadcrumb">
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/" itemprop="item"><span itemprop="name">Главная</span></a><meta itemprop="position" content="1"></li>
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active" itemprop="item"><span itemprop="name">Оформление заявки</span><meta itemprop="position" content="2"></li>
+            </ol>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="heading-undelined">Оформление заявки</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="category-description">
+              <p class="text-content hidden-xs">
+
+
+                  Здесь Вы можете оформить заявку на металл в режиме онлайн. Специалисты Производственно-коммерческого предприятия "Цвет" оперативно обработают запрос и предоставят информацию о цене и условиях.
+
+                    <p>- Укажите дополнительные требования к заказу (уточнения/вопросы) в окне "заметка к заявке".</p>
+                    <p>- Также, Вы можете прикрепить карточку предприятия для получения коммерческого предложения от нас сразу в виде счета.</p>
+
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+            <div class="container-fluid">
+
+             <div class="row">
+              {% if cart_items %}
+                <div id="cart_items_box">
+                    <div class="col-xs-12">
+                      <div>
+                        {% for item in cart_items %}
+                          <div class="product-in-order" id="item_id_{{ item.id }}">
+                              <form id="form_delete_{{ item.id }}" class="delete-form">
+                                  <input type="hidden" name="item_id" value="{{ item.id }}">
+                                  <input type="hidden" name="submit" value=" ">
+                                  {% csrf_token %}
+                                  <button type="button" aria-label="Close" class="close" onclick="delete_product({{ item.id }})">
+                                      <span aria-hidden="true">×</span>
+                                  </button>
+                              </form>
+                              <a href="{{ item.product.get_absolute_url }}" target="_blank" class="product-name">{{ item.product.name_main }}</a>
+                          </div>
+                        {% endfor %}
+                      </div>
+
+  
+                      <hr>
+
+
+                      </div>
+                      {% comment %} <form role="form" action="" method="post" name="checkout_order_new" class="form-order" enctype="multipart/form-data">
+                        <input type="hidden" name="submit_check" value="checkout">
+                        <div class="row">
+                          <div class="col-xs-12">
+                            <div class="order-form-name">
+                              <div class="row">
+                                <div class="col-xs-12 col-sm-4 col-md-3">
+                                  <label for="name">Имя</label>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-md-9">
+                                    <input type="search" class="form-control" placeholder="*Имя" id="id_name" name="name" {% if form.name.value %}value="{{ form.name.value }}"{% endif %}>
+                                    <p class="c-red" id="error_form_name"></p>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="order-form-email">
+                              <div class="row">
+                                <div class="col-xs-12 col-sm-4 col-md-3">
+                                  <label for="email">Почта</label>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-md-9">
+                                    <input type="search" class="form-control" placeholder="*E-mail" id="id_email" name="email" {% if form.email.value %}value="{{ form.email.value }}"{% endif %}>
+                                    <p class="c-red" id="error_form_email"></p>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="order-form-phone">
+                              <div class="row">
+                                <div class="col-xs-12 col-sm-4 col-md-3">
+                                  <label for="phone">Телефон<span class="c-red"> *</span></label>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-md-9">
+                                    <input type="search" class="form-control" placeholder="*Телефон"  id="id_phone" name="phone" {% if form.phone.value %}value="{{ form.phone.value }}"{% endif %}>
+                                    <p class="c-red" id="error_form_phone"></p>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="order-form-comment">
+                              <div class="row">
+                                <div class="col-xs-12 col-sm-4 col-md-3">
+                                  <label for="comment">Заметка к заявке</label>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-md-9">
+                                  <textarea type="search" class="form-control" rows="5" placeholder="Текст заявки" id="id_text_zayavka" name="text_zayavka" >{% if text_zayavka %}{{ text_zayavka }}{% endif %}</textarea>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="order-form-file">
+                              <div class="row">
+                                <div class="col-xs-12 col-sm-4 col-md-3">
+                                  <label for="file">Прикрепить карточку предприятия</label>
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-md-9">
+                                  <div data-provides="fileinput" class="fileinput fileinput-new"><span class="btn btn-default btn-file bg-gray"><span class="fileinput-new">Выберите файл</span><span class="fileinput-exists">Изменить</span>
+                                      <input type="file" name="file"></span><span class="fileinput-filename"></span><a href="#" data-dismiss="fileinput" style="float: none" class="close fileinput-exists">×</a></div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="personal-data">
+                              <div class="row">
+                                <div class="col-xs-12 col-sm-4 col-md-3"></div>
+                                <div class="col-xs-12 col-sm-8 col-md-9">
+                                  <div class="checkbox">
+                                    <label>
+                                      <input type="checkbox" value="True" name="consent" id="id_consent">Я принимаю условия <a target="_blank" href="/informatsija__politika_obrabotki_dannyh/">политики конфиденциальности</a>
+                                    </label>
+                                      <p class="c-red" id="error_cart_consent"></p>
+                                  </div>
+                                  <div class="checkbox">
+                                    <label>
+                                      <input type="checkbox" value="True" name="consent_2" id="id_consent_2">Я выражаю <a target="_blank" href="/soglasie-na-obrabotku-personalnyh-dannyh/">согласие на обработку персональных данных</a>
+                                    </label>
+                                    <p class="c-red" id="error_cart_consent_2"></p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-xs-12 col-sm-4 col-md-3"></div>
+                              <div class="col-xs-12 col-sm-8 col-md-9">
+                                  <a type="submit" value="Отправить" name="order-submit" class="btn btn-pkf" id="btn_order_form" onclick="document.getElementById('btn_order_form').disabled = true;send_form_order();{{ checkout_cart|safe }}">Отправить заявку</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form> {% endcomment %}
+
+                      <form role="form" method="post" id="checkout-form" name="checkout_order_new" class="form-order ajax-form" action="{% url 'menu:send_form_order' %}" enctype="multipart/form-data">
+                          {% csrf_token %}
+                          <input type="hidden" name="submit_check" value="checkout">
+                          
+                          <div class="row">
+                            <div class="col-xs-12">
+                              <div class="order-form-name">
+                                <div class="row">
+                                  <div class="col-xs-12 col-sm-4 col-md-3">
+                                    <label for="id_name">Имя</label>
+                                  </div>
+                                  <div class="col-xs-12 col-sm-8 col-md-9">
+                                      <input type="search" class="form-control" placeholder="*Имя" id="id_name" name="name">
+                                      <p class="c-red" id="error_form_name"></p>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="order-form-email">
+                                <div class="row">
+                                  <div class="col-xs-12 col-sm-4 col-md-3">
+                                    <label for="id_email">Почта</label>
+                                  </div>
+                                  <div class="col-xs-12 col-sm-8 col-md-9">
+                                      <input type="search" class="form-control" placeholder="*E-mail" id="id_email" name="email">
+                                      <p class="c-red" id="error_form_email"></p>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="order-form-phone">
+                                <div class="row">
+                                  <div class="col-xs-12 col-sm-4 col-md-3">
+                                    <label for="id_phone">Телефон<span class="c-red"> *</span></label>
+                                  </div>
+                                  <div class="col-xs-12 col-sm-8 col-md-9">
+                                      <input type="search" class="form-control" placeholder="*Телефон"  id="id_phone" name="phone">
+                                      <p class="c-red" id="error_form_phone"></p>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="order-form-comment">
+                                <div class="row">
+                                  <div class="col-xs-12 col-sm-4 col-md-3">
+                                    <label for="id_text_zayavka">Заметка к заявке</label>
+                                  </div>
+                                  <div class="col-xs-12 col-sm-8 col-md-9">
+                                    <textarea type="search" class="form-control" rows="5" placeholder="Текст заявки" id="id_text_zayavka" name="text_zayavka"></textarea>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="order-form-file">
+                                <div class="row">
+                                  <div class="col-xs-12 col-sm-4 col-md-3">
+                                    <label for="file">Прикрепить карточку предприятия</label>
+                                  </div>
+                                  <div class="col-xs-12 col-sm-8 col-md-9">
+                                    <div data-provides="fileinput" class="fileinput fileinput-new">
+                                      <span class="btn btn-default btn-file bg-gray">
+                                        <span class="fileinput-new">Выберите файл</span>
+                                        <span class="fileinput-exists">Изменить</span>
+                                        <input type="file" name="file">
+                                      </span>
+                                      <span class="fileinput-filename"></span>
+                                      <a href="#" data-dismiss="fileinput" style="float: none" class="close fileinput-exists">×</a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="personal-data">
+                                <div class="row">
+                                  <div class="col-xs-12 col-sm-4 col-md-3"></div>
+                                  <div class="col-xs-12 col-sm-8 col-md-9">
+                                    <div class="checkbox">
+                                      <label>
+                                        <input type="checkbox" value="True" name="consent" id="id_consent">Я принимаю условия <a target="_blank" href="/informatsija__politika_obrabotki_dannyh/">политики конфиденциальности</a>
+                                      </label>
+                                        <p class="c-red" id="error_cart_consent"></p>
+                                    </div>
+                                    <div class="checkbox">
+                                      <label>
+                                        <input type="checkbox" value="True" name="consent_2" id="id_consent_2">Я выражаю <a target="_blank" href="/soglasie-na-obrabotku-personalnyh-dannyh/">согласие на обработку персональных данных</a>
+                                      </label>
+                                      <p class="c-red" id="error_cart_consent_2"></p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-xs-12 col-sm-4 col-md-3"></div>
+                                <div class="col-xs-12 col-sm-8 col-md-9">
+                                    <button type="submit" name="order-submit" class="btn btn-pkf" id="btn_order_form">Отправить заявку</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                      </form>
+                </div>
+              {% endif %}
+
+                <div class="col-xs-12" id="cart_empty" {% if cart_items %}style="display: none;"{% endif %}>
+                  <div class="order-header">
+                    <p class="alert alert-warning">В предварительном заказе пока нет товарных позиций. Добавьте их</p>
+                  </div>
+                </div>
+             </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end Order page-->
+
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "catalog.html" %}
+{% load search_tags %}
+{% block content %}
+    <!-- category_product.html -->
+    <div class="podpodcategory-content">
+        <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <ol class="breadcrumb">
+                </ol>
+              </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="heading-undelined">
+                        Результаты поиска: '{{ q }}'
+                    </h1>
+                </div>
+            </div>
+
+            {% if results %}
+
+                <!--- Таблица ---->
+                <div class="table-responsive">
+                <table class="table table-striped products-table">
+                <thead>
+                <tr>
+                    <th>Продукт</th>
+                </tr>
+                </thead>
+                <tbody>
+            {% endif %}
+            {% for item in results %}
+                <tr>
+                    <td class="td_link_filtr"><a class="link" href="{{ item.get_absolute_url }}">
+                        {#                            {% if item.catalog.name_title %}{{ item.catalog.name_title }}{% else %}#}
+                        {{ item.name }}
+                        {#                            {% endif %}#}
+                        {#                        {% if item.size_a %}{{ item.get_size_a  }}{% endif %}#}
+                        {#                        {% if item.size_b %}x {{ item.get_size_b }}{% endif %}#}
+                        {#                        {% if item.size_c %}x {{ item.get_size_c }}{% endif %}#}
+                        {#                        {% if item.size_d %}x {{ item.get_size_d }}{% endif %}#}
+                        {#                        {% if item.size_e %}x {{ item.get_size_e }}{% endif %}#}
+                        {#                        {% if item.size_f %}x {{ item.get_size_f }}{% endif %}#}
+                        {#                        {% if item.size_l %}x {{ item.get_size_l }}{% endif %}#}
+                        {#                         {{ item.marka.name }}#}
+                    </a></td>
+                </tr>
+
+            {% empty %}
+                <p>Нет продукции по заданному запросу.</p>
+            {% endfor %}
+            {% if results %}
+                </tbody>
+                </table>
+                </div>
+            {% endif %}
+
+
+            {% comment %} {% pagination_links request paginator %} {% endcomment %}
+            {% pagination_links request paginator page_obj %}
+        </div>
+
+
+    </div>
+{% endblock %}

@@ -1,0 +1,372 @@
+{% extends "catalog.html" %}
+{% load i18n %}
+{% load catalog_tags filter_urls %}
+
+
+{% block content %}
+    <div class="bg-gray m-b-30">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <ol class="breadcrumb">
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/" itemprop="item"><span itemprop="name">Главная</span></a><meta itemprop="position" content="1"></li>
+                {% if current_menu %}
+                  {% if current_menu.parent %}
+                          {% if current_menu.parent.parent %}
+                            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ current_menu.parent.parent.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ current_menu.parent.parent.name }}</span></a><meta itemprop="position" content="2"></li>
+                          {% endif %}
+
+                        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ current_menu.parent.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ current_menu.parent.name }}</span></a><meta itemprop="position" content="{% if current_menu.parent.parent %}3{% else %}2{% endif %}"></li>
+                  {% endif %}
+                    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ current_menu.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ current_menu.name }}</span></a><meta itemprop="position" content="{% if current_menu.parent.parent %}4{% elif current_menu.parent %}3{% else %}2{% endif %}"></li>
+                {% endif %}
+              <li class="active" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name">{{ product.name_main }}</span><meta itemprop="position" content="{% if current_menu.parent.parent %}5{% elif current_menu.parent %}4{% else %}3{% endif %}"></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+   <!-- Product content-->
+    <div class="product-content" itemscope itemtype="https://schema.org/Offer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+              <h1><span itemprop="name">{{ product.name_main }}</span>
+              </h1>
+              <meta itemprop="url" content="{{ product.name_main.get_absolut_url }}" />
+              <meta itemprop="availability" content="В наличии" />
+          </div>
+        </div>
+        <div class="section">
+          <div class="row">
+            <div class="col-sm-4 col-md-4">
+              <div class="product-img"><a href="{{ MEDIA_URL }}{{ product.image }}" data-lightbox="product-img" data-title="1"><img style="height: 300px;width: 300px;object-fit: cover;" loading="lazy" src="{{ MEDIA_URL }}{{ product.image }}" alt="{{ product.name_main }}" class="img-responsive"></a></div>
+            </div>
+            {% comment %} <div class="col-sm-4 col-md-4">
+              <p class="h3">Характеристики</p>
+              <table class="table">
+                <tbody>
+                    {% if product.catalog.labelSizeA and product.size_a > 0 and product.size_a != "0" %}
+                      <tr>
+                        <td>{{ product.catalog.labelSizeA }}</td>
+                        <td class="text-right"><a href="{{ product.catalog.get_absolute_url }}1s/{{ product.size_a|my_slugify }}/">{{ product.size_a }}</a></td>
+                      </tr>
+                    {% endif %}
+                    {% if product.catalog.labelSizeB and product.size_b > 0  and product.size_b != "0" %}
+                      <tr>
+                        <td>{{ product.catalog.labelSizeB }}</td>
+                        <td class="text-right"><a href="{{ product.catalog.get_absolute_url }}2s/{{ product.size_b|my_slugify }}/">{{ product.size_b }}</a></td>
+                      </tr>
+                    {% endif %}
+                    {% if product.catalog.labelSizeC and product.size_c > 0  and product.size_c != "0" %}
+                      <tr>
+                        <td>{{ product.catalog.labelSizeC }}</td>
+                        <td class="text-right"><a href="{{ product.catalog.get_absolute_url }}3s/{{ product.size_c|my_slugify }}/">{{ product.size_c }}</a></td>
+                      </tr>
+                    {% endif %}
+                     {% if product.catalog.labelSizeD and product.size_d > 0 and product.size_d != "0"  %}
+                      <tr>
+                        <td>{{ product.catalog.labelSizeD }}</td>
+                        <td class="text-right"><a href="{{ product.catalog.get_absolute_url }}4s/{{ product.size_d|my_slugify }}/">{{ product.size_d }}</a></td>
+                      </tr>
+                    {% endif %}
+                    {% if product.catalog.labelSizeE and product.size_e > 0 and product.size_e != "0"  %}
+                      <tr>
+                        <td>{{ product.catalog.labelSizeE }}</td>
+                        <td class="text-right"><a href="{{ product.catalog.get_absolute_url }}5s/{{ product.size_e|my_slugify }}/">{{ product.size_e }}</a></td>
+                      </tr>
+                    {% endif %}
+                    {% if product.catalog.labelSizeF and product.size_f > 0 and product.size_f != "0"  %}
+                      <tr>
+                        <td>{{ product.catalog.labelSizeF }}</td>
+                        <td class="text-right"><a href="{{ product.catalog.get_absolute_url }}6s/{{ product.size_f|my_slugify }}/">{{ product.size_f }}</a></td>
+                      </tr>
+                    {% endif %}
+                    {% if product.catalog.labelSizeL and product.size_l > 0 and product.size_l != "0"  %}
+                      <tr>
+                        <td>{{ product.catalog.labelSizeL }}</td>
+                        <td class="text-right"><a href="{{ product.catalog.get_absolute_url }}7s/{{ product.size_l|my_slugify }}/">{{ product.size_l }}</a></td>
+                      </tr>
+                    {% endif %}
+                    {% if product.marka %}
+                      <tr>
+                        <td>Марка</td>
+                        <td class="text-right"><a href="{{ product.catalog.get_absolute_url }}{{ product.marka.name_lat }}/">{{ product.marka }}</a></td>
+                      </tr>
+                    {% endif %}
+                    {% if product.gost %}
+                      <tr>
+                        <td>ГОСТ</td>
+                        <td class="text-right"><a href="{{ product.catalog.get_absolute_url }}{{ product.gost.number_lat }}/">{{ product.gost }}</a></td>
+                      </tr>
+                    {% endif %}
+                </tbody>
+              </table>
+            </div> {% endcomment %}
+            <div class="col-sm-4 col-md-4">
+              <p class="h3">Характеристики</p>
+              <table class="table">
+                <tbody>
+                    {% if product.catalog.labelSizeA and product.size_a and product.size_a != "0" %}
+                      <tr>
+                        <td>{{ product.catalog.labelSizeA }}</td>
+                        <td class="text-right"><a href="{% build_filter_url 's1' product.size_a|my_slugify %}">{{ product.size_a }}</a></td>
+                      </tr>
+                    {% endif %}
+                    {% if product.catalog.labelSizeB and product.size_b and product.size_b != "0" %}
+                      <tr>
+                        <td>{{ product.catalog.labelSizeB }}</td>
+                        <td class="text-right"><a href="{% build_filter_url 's2' product.size_b|my_slugify %}">{{ product.size_b }}</a></td>
+                      </tr>
+                    {% endif %}
+                    {% if product.catalog.labelSizeC and product.size_c and product.size_c != "0" %}
+                      <tr>
+                        <td>{{ product.catalog.labelSizeC }}</td>
+                        <td class="text-right"><a href="{% build_filter_url 's3' product.size_c|my_slugify %}">{{ product.size_c }}</a></td>
+                      </tr>
+                    {% endif %}
+                     {% if product.catalog.labelSizeD and product.size_d and product.size_d != "0" %}
+                      <tr>
+                        <td>{{ product.catalog.labelSizeD }}</td>
+                        <td class="text-right"><a href="{% build_filter_url 's4' product.size_d|my_slugify %}">{{ product.size_d }}</a></td>
+                      </tr>
+                    {% endif %}
+                    {% if product.catalog.labelSizeE and product.size_e and product.size_e != "0" %}
+                      <tr>
+                        <td>{{ product.catalog.labelSizeE }}</td>
+                        <td class="text-right"><a href="{% build_filter_url 's5' product.size_e|my_slugify %}">{{ product.size_e }}</a></td>
+                      </tr>
+                    {% endif %}
+                    {% if product.catalog.labelSizeF and product.size_f and product.size_f != "0" %}
+                      <tr>
+                        <td>{{ product.catalog.labelSizeF }}</td>
+                        <td class="text-right"><a href="{% build_filter_url 's6' product.size_f|my_slugify %}">{{ product.size_f }}</a></td>
+                      </tr>
+                    {% endif %}
+                    {% if product.catalog.labelSizeL and product.size_l and product.size_l != "0" %}
+                      <tr>
+                        <td>{{ product.catalog.labelSizeL }}</td>
+                        <td class="text-right"><a href="{% build_filter_url 's7' product.size_l|my_slugify %}">{{ product.size_l }}</a></td>
+                      </tr>
+                    {% endif %}
+                    {% if product.marka %}
+                      <tr>
+                        <td>Марка</td>
+                        <td class="text-right"><a href="{% build_filter_url 'marka' product.marka.name_lat %}">{{ product.marka }}</a></td>
+                      </tr>
+                    {% endif %}
+                    {% if product.gost %}
+                      <tr>
+                        <td>ГОСТ</td>
+                        <td class="text-right"><a href="{% build_filter_url 'gost' product.gost.number_lat %}">{{ product.gost }}</a></td>
+                      </tr>
+                    {% endif %}
+                </tbody>
+              </table>
+            </div>
+            <div class="col-sm-4 col-md-4">
+              <div class="product-buy-block">
+                    {% if product.price %}
+                      <div class="h3" itemprop="price">{{ product.price|floatformat:"-2" }} руб.</div>
+                    {% endif %}
+
+                    <a href="#modal-buy" data-toggle="modal" class="btn btn-pkf" 
+                      onclick="
+                          document.getElementById('add_product_name').textContent = '{{ product.name_main|escapejs }}';
+                          add_to_cart('{{ product.slug|escapejs }}');
+                          {{ button_zayavka_kategoriya|safe }}
+                      ">
+                        Добавить в заявку
+                    </a>
+                    
+                    {% if not product.price %}
+                      <a href="#modal-price-request" data-toggle="modal" class="btn btn-pkf btn-pkf-inverse" 
+                        onclick="
+                            document.getElementById('get_price_slug').value = '{{ product.slug }}';
+                            document.getElementById('get_price_name').textContent = '{{ product.name_main|escapejs }}';
+                        ">
+                          <span itemprop="price">Узнать цену</span>
+                      </a>
+                    {% endif %}
+              </div>
+              <div class="questionnaire-download">
+
+                    {% if product.sertificate %}
+                       <div class="product-info-item"><i aria-hidden="true" class="fa fa-star"></i><a href="{{ MEDIA_URL }}{{ product.sertificate.image }}" data-lightbox="image-1">Посмотреть сертификат</a></div>
+                    {% endif %}
+                  <div class="product-info-item"><i aria-hidden="true" class="fa fa-file-text-o"></i><a href="/opros.zip" download onclick="{{ button_opros_product|safe }}">Скачать опросный лист</a>
+                  <p class="p-r-60">
+                    Отправить заполненный опросный лист можно на
+                    <a href="mailto:{{ current_filial.email }}" class="email" onclick="{{ button_email_product|safe }}">{{ current_filial.email }}</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-4 col-md-4">
+              <div class="product-info">
+                <div class="product-info-item">
+                  <div class="product-info-title">Оплата и отгрузка</div>
+                  <div class="product-info-description">Информация о способах и вариантах отгрузки</div>
+                  <div class="product-info-link"><a href="#modal-product-payment" data-toggle="modal">подробнее</a></div>
+                </div>
+                <div class="product-info-item">
+                  <div class="product-info-title">Информация о доставке</div>
+                  <div class="product-info-description">Информация о способах доставки</div>
+                  <div class="product-info-link"><a href="#modal-product-delivery" data-toggle="modal">подробнее</a></div>
+                </div>
+                <div class="product-info-item">
+                  <div class="product-info-title">Условия возврата</div>
+                  <div class="product-info-description">Информация о способах и условиях возврата</div>
+                  <div class="product-info-link"><a href="#modal-product-return" data-toggle="modal">подробнее</a></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-8 col-md-8">
+              <p>
+                *Окончательная цена на продукцию формируется исходя из условий поставки: объема, условий оплаты и места отгрузки. Данная информация о товаре, его цене и наличии носит исключительно информационный характер и ни при каких условиях не является публичной офертой, определяемой положениями ч. 2 ст. 437 Гражданского кодекса Российской Федерации.
+                Все вопросы по поставкам металлопродукции в другие регионы России, наличию товара на складах и ассортименту можно задать нашим менеджерам.
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <span>{{ product.name_main }} продажа по городу {{ current_filial.name }}</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+                <span itemprop="description">{{ product.description|safe }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end Product content-->
+    <!-- section Callback product-->
+        {% include "sys/callback_manager.html" %}
+    <!-- end section Callback product-->
+    <!-- Other category services-->
+    <div class="section other-category">
+      <div class="other-category__services">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="h3">Наши услуги</div>
+            </div>
+          </div>
+          <div class="row">
+            {% for item in usluga_main_list %}
+                  <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 ib-col"><a href="{{ item.get_absolute_url }}">
+                      <div class="thumbnail">
+                        <div class="thumbnail-img"><img style="height: 150px;width: 100%;object-fit: cover;" src="{{ MEDIA_URL }}{{ item.image }}" loading="lazy" alt="{{ item.name }}" class="img-responsive"></div>
+                        <div class="thumbnail-description">
+                          <h4>{{ item.name }}</h4>
+                        </div>
+                      </div></a></div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end Other category services-->
+    <!-- section Certificates-->
+{#    {% if product.sertificate or current_menu.get_sertificates %}#}
+    {% if product.sertificate %}
+        <section class="section bg-gray section-certificates">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="h3">Сертификаты</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div id="mp-certificates-slider" class="wrap-slick">
+                   <div><a href="{{ MEDIA_URL }}{{ product.sertificate.image }}" data-lightbox="certificates" data-title="1"><img style="height: 150px;width: 100%;object-fit: cover;" src="{{ MEDIA_URL }}{{ product.sertificate.image }}" loading="lazy" alt="{{ product.sertificate.name }}" class="img-responsive"></a></div>
+                    {% for item in current_menu.get_sertificates %}
+                        {% if item != product.sertificate %}
+                            <div><a href="{{ MEDIA_URL }}{{ item.image }}" data-lightbox="certificates" data-title="1"><img style="height: 150px;width: 100%;object-fit: cover;" src="{{ MEDIA_URL }}{{ item.image }}" loading="lazy" alt="{{ item.name }}" class="img-responsive"></a></div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+    {% endif %}
+    <!-- end section Certificates-->
+    <!-- Other category-->
+    {% if metall_categories_similar %}
+        <div class="section other-category bg-gray">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="h3">Другие товары</div>
+              </div>
+            </div>
+            <div class="row">
+
+                {% for item in metall_categories_similar %}
+                      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 ib-col"><a href="{{ item.get_absolute_url }}">
+                          <div class="thumbnail">
+                            <div class="thumbnail-img"><img style="height: 150px;width: 100%;object-fit: cover;" src="{{ MEDIA_URL }}{{ item.image }}" loading="lazy" alt="{{ item.name }}" class="img-responsive"></div>
+                            <div class="thumbnail-description">
+                              <h4>{{ item.name }}</h4>
+                            </div>
+                          </div></a>
+                      </div>
+                {% endfor %}
+            </div>
+          </div>
+        </div>
+    {% endif %}
+    <!-- end Other category-->
+    <!--Модальное окно "Информация об оплате и отгрузке"-->
+    <div id="modal-product-payment" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog modal-dialog_product-payment">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+            <div class="clearfix"></div>
+            <div class="modal-title text-center">Оплата и отгрузка</div>
+          </div>
+          <div class="modal-body">
+              {{ current_menu.oplata|safe }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Модальное окно "Информация о доставка"-->
+    <div id="modal-product-delivery" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog modal-dialog_product-delivery">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+            <div class="clearfix"></div>
+            <div class="modal-title text-center">Способы доставки</div>
+          </div>
+          <div class="modal-body">
+            {{ current_menu.dostavka|safe }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Модальное окно "Информация о условиях возврата"-->
+    <div id="modal-product-return" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog modal-dialog_product-delivery">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+            <div class="clearfix"></div>
+            <div class="modal-title text-center">Условия возврата</div>
+          </div>
+          <div class="modal-body">
+            <p>Возврат осуществляется, в случае если товар не соответствует товарной накладной.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

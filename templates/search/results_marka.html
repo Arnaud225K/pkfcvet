@@ -1,0 +1,58 @@
+<!-- results_marka.html -->
+{% extends "catalog.html" %}
+{% load search_tags %}
+{% block content %}
+    <!-- category_product.html -->
+    <div class="podpodcategory-content">
+        <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <ol class="breadcrumb">
+                </ol>
+              </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="heading-undelined">
+                        Результаты поиска: '{{ q }}'
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+            {% if results %}
+                    <table class="table table-bordered gost-table">
+{#                      <thead>#}
+{#                        <tr>#}
+{#                          <th colspan="5">{{ item.name }}</th>#}
+{#                        </tr>#}
+{#                      </thead>#}
+                      <tbody>
+                        <tr>
+                        {% for sub_item in results %}
+                          <td><a href="{{ sub_item.get_absolute_url }}">{{ sub_item.name }}</a></td>
+                            {% if forloop.counter|divisibleby:5 %}
+                                </tr>
+                                <tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tr>
+                      </tbody>
+                    </table>
+                    {% comment %} {% pagination_links request paginator %} {% endcomment %}
+                    {% pagination_links request paginator page_obj %}
+
+
+            {% else %}
+                <p>Нет продукции по заданному запросу.</p>
+            {% endif %}
+                <br/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+<!-- end results_gost.html -->

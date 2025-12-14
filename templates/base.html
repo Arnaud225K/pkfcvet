@@ -1,0 +1,318 @@
+{% load nospaces %}
+{% load catalog_tags %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    {% nospaces %}
+    <meta name="description" content="
+        {% if product %}
+            {% if product.keywords_description %}
+                {{ product.keywords_description }}
+            {% else %}
+                {{ product.name_main }} оптом. 🚛 Доставка по России и в страны СНГ. Цены на продукцию уточняйте у наших специалистов.
+            {% endif %}
+        {% elif dop_text_block_url and dop_text_block_url.0.keywords_description %}
+            {% for item_text_block in dop_text_block_url %}
+                {{ item_text_block.keywords_description }}
+            {% endfor %}
+        {% elif news_one %}
+            {% if news_one.keywords_description %}
+                {{ news_one.keywords_description }}
+            {% else %}
+                {{ news_one.name }}
+            {% endif %}
+        {% elif art_one %}
+            {% if art_one.keywords_description %}
+                {{ art_one.keywords_description }}
+            {% else %}
+                {{ art_one.name }}
+            {% endif %}
+        {% elif oneGost %}
+            {{ oneGostGroup.name }} {{ oneGost }}
+        {% elif metallGroup %}
+            {{ metallGroup.name }}
+            {% if oneMarka %}
+                  {{ oneMarka }}
+            {% endif %}
+        {% elif current_marka or current_gost or s1 or s2 or s3 or s4 or s5 or s6 or s7  %}
+              {{ current_menu.name }}
+                {% if current_marka %}{{ current_marka }}{% endif %}
+                {%  if current_gost %}{{ current_gost }}{% endif %}
+                {{ label_s1|lower }} {{ s1 }}
+                {% if s2 != "" and s1 != "" %}x{% endif %}
+                {{ label_s2|lower }} {{ s2 }}
+                {% if s2 != "" and s3 != "" %}x{% endif %}
+                {{ label_s3|lower }} {{ s3 }}
+                {% if s3 != "" and s4 != ""%}x{% endif %}
+                {{ label_s4|lower }} {{ s4 }} {{ label_s5|lower }} {{ s5 }} {{ label_s6|lower }} {{ s6 }} {{ label_s7|lower }} {{ s7 }}
+               {{ current_filial.name_p }} купить со склада из наличия и под заказ. Звоните! 📞 {{ current_filial.phone_dop }}
+        {% elif current_category.keywords_description %}
+            Купить {{ current_category.keywords_description }}. По низкой цене. Склад в городе {{ current_filial.name }}, скидка на доставку 12%.
+        {% else %}
+            {% if current_menu.keywords_description %}
+                {{ current_menu.keywords_description }} {{ current_filial.name_p }}, скидка на 🚛 доставку 12%. Звоните! 📞 {{ current_filial.phone_dop }}
+            {% else %}
+                {{ keywords.description }}
+            {% endif %}
+        {% endif %}
+    "/>
+    <meta name="keywords" content="
+        {% if product %}
+            {{ product.keywords }}
+        {% elif news_one %}
+            {{ news_one.keywords }}
+        {% elif art_one %}
+            {{ art_one.keywords }}
+        {% elif dop_text_block_url and dop_text_block_url.0.keywords %}
+            {% for item_text_block in dop_text_block_url %}
+                {{ item_text_block.keywords }}
+            {% endfor %}
+        {% elif current_category.keywords %}
+            {{ current_category.keywords }}
+        {% else %}
+            {% if current_menu.keywords %}
+                {{ current_menu.keywords }}
+            {% else %}
+                {{ keywords.text }}
+            {% endif %}
+        {% endif %}
+    "/>
+    <title>
+        {% if page404 %}
+            404 - Страница не найдена - ПФ КВЕТ г. {{ current_filial.name }}
+        {% elif dop_text_block_url and dop_text_block_url.0.title_main %}
+            {% for item_text_block in dop_text_block_url %}
+                {{ item_text_block.title_main }}
+            {% endfor %}
+        {% elif news_one %}
+            {% if news_one.title_main %}
+                {{ news_one.title_main }}
+            {% else %}
+                {{ news_one.name }} - новости на сайте ПФ КВЕТ
+            {% endif %}
+        {% elif art_one %}
+            {% if art_one.title_main %}
+                {{ art_one.title_main }}
+            {% else %}
+                {{ art_one.name }} - статьи на сайте ПФ КВЕТ
+            {% endif %}
+        {% elif product %}
+            {% if product.title_main %}
+                    {{ product.title_main }} в г. {{ current_filial.name }}
+            {% else %}
+                {{ product.name_main }} в г. {{ current_filial.name }}
+            {% endif %}
+        {% elif oneGost %}
+            {{ oneGostGroup.name }} {{ oneGost }} ПФ КВЕТ г. {{ current_filial.name }}
+        {% elif metallGroup %}
+            {{ metallGroup.name }}
+            {% if oneMarka %}
+                  {{ oneMarka }}
+            {% endif %}
+            ПФ КВЕТ г. {{ current_filial.name }}
+        {% elif current_marka or current_gost or s1 or s2 or s3 or s4 or s5 or s6 or s7 %}
+            {{ current_menu.name }} {% if current_marka %}{{ current_marka }}{% endif %}
+                {%  if current_gost %}{{ current_gost }}{% endif %}
+                {{ label_s1|lower }} {{ s1 }}
+                {% if s2 != "" and s1 != "" %}x{% endif %}
+                {{ label_s2|lower }} {{ s2 }}
+                {% if s2 != "" and s3 != "" %}x{% endif %}
+                {{ label_s3|lower }} {{ s3 }}
+                {% if s3 != "" and s4 != ""%}x{% endif %}
+                {{ label_s4|lower }} {{ s4 }} {{ label_s5|lower }} {{ s5 }} {{ label_s6|lower }} {{ s6 }} {{ label_s7|lower }} {{ s7 }}
+            {{ current_filial.name_p }} купить, цены, оптом и в розницу со склада из наличия
+        {% elif current_category.title_main %}
+            {{ current_category.title_main }} купить, цены г. {{ current_filial.name }} — ПФ КВЕТ
+        {% else %}
+            {% if current_menu.title_main %}
+                {{ current_menu.title_main }} {{ current_filial.name_p }} со склада оптом и в розницу — ПФ КВЕТ
+            {% else %}
+                {{ current_menu.name }} ПФ КВЕТ г. {{ current_filial.name }}
+            {% endif %}
+        {% endif %}
+    </title>
+
+    <link rel="icon" type="image/png" href="{% static "img/favicon/favicon-96x96.png" %}" sizes="96x96"/>
+    <link rel="icon" type="image/svg+xml" href="{% static "img/favicon/favicon.svg" %}"/>
+    <link rel="shortcut icon" href="{% static "img/favicon/favicon.ico" %}"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static "img/favicon/apple-touch-icon.png" %}"/>
+    <meta name="apple-mobile-web-app-title" content="pfkvet"/>
+    <link rel="manifest" href="{% static "img/favicon/site.webmanifest" %}"/>
+
+    <!--[if lt IE 9]>
+    <script src="{% static 'js/html5shiv.js' %}"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="{% static 'css/jquery.mmenu.all.css' %}">
+    <link rel="stylesheet" href="{% static 'css/libs.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pkf.css' %}?v=15">
+
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:site_name" content="ПФ КВЕТ">
+    <meta property="og:url" content="{{ request.path }}">
+    <meta property="og:title" content="
+        {% if page404 %}
+            404 - Страница не найдена - ПФ КВЕТ г. {{ current_filial.name }}
+        {% elif dop_text_block_url and dop_text_block_url.0.title_main %}
+            {% for item_text_block in dop_text_block_url %}
+                {{ item_text_block.title_main }}
+            {% endfor %}
+        {% elif news_one %}
+            {% if news_one.title_main %}
+                {{ news_one.title_main }}
+            {% else %}
+                {{ news_one.name }} - новости на сайте ПФ КВЕТ
+            {% endif %}
+        {% elif art_one %}
+            {% if art_one.title_main %}
+                {{ art_one.title_main }}
+            {% else %}
+                {{ art_one.name }} - статьи на сайте ПФ КВЕТ
+            {% endif %}
+        {% elif product %}
+            {% if product.title_main %}
+                    {{ product.title_main }} в г. {{ current_filial.name }}
+            {% else %}
+                {{ product.name_main }} в г. {{ current_filial.name }}
+            {% endif %}
+        {% elif oneGost %}
+            {{ oneGostGroup.name }} {{ oneGost }} ПФ КВЕТ г. {{ current_filial.name }}
+        {% elif metallGroup %}
+            {{ metallGroup.name }}
+            {% if oneMarka %}
+                  {{ oneMarka }}
+            {% endif %}
+            ПФ КВЕТ г. {{ current_filial.name }}
+        {% elif current_marka or current_gost or s1 or s2 or s3 or s4 or s5 or s6 or s7 %}
+            {{ current_menu.name }} {% if current_marka %}{{ current_marka }}{% endif %}
+                {%  if current_gost %}{{ current_gost }}{% endif %}
+                {{ label_s1|lower }} {{ s1 }}
+                {% if s2 != "" and s1 != "" %}x{% endif %}
+                {{ label_s2|lower }} {{ s2 }}
+                {% if s2 != "" and s3 != "" %}x{% endif %}
+                {{ label_s3|lower }} {{ s3 }}
+                {% if s3 != "" and s4 != ""%}x{% endif %}
+                {{ label_s4|lower }} {{ s4 }} {{ label_s5|lower }} {{ s5 }} {{ label_s6|lower }} {{ s6 }} {{ label_s7|lower }} {{ s7 }}
+            {{ current_filial.name_p }} купить, цены, оптом и в розницу со склада из наличия
+        {% elif current_category.title_main %}
+            {{ current_category.title_main }} купить, цены г. {{ current_filial.name }} — ПФ КВЕТ
+        {% else %}
+            {% if current_menu.title_main %}
+                {{ current_menu.title_main }} {{ current_filial.name_p }} со склада оптом и в розницу — ПФ КВЕТ
+            {% else %}
+                {{ current_menu.name }} ПФ КВЕТ г. {{ current_filial.name }}
+            {% endif %}
+        {% endif %}
+    "/>
+    <meta property="og:description" content="
+        {% if product %}
+            {% if product.keywords_description %}
+                {{ product.keywords_description }}
+            {% else %}
+                {{ product.name_main }} оптом. 🚛 Доставка по России и в страны СНГ. Цены на продукцию уточняйте у наших специалистов.
+            {% endif %}
+        {% elif dop_text_block_url and dop_text_block_url.0.keywords_description %}
+            {% for item_text_block in dop_text_block_url %}
+                {{ item_text_block.keywords_description }}
+            {% endfor %}
+        {% elif news_one %}
+            {% if news_one.keywords_description %}
+                {{ news_one.keywords_description }}
+            {% else %}
+                {{ news_one.name }}
+            {% endif %}
+        {% elif art_one %}
+            {% if art_one.keywords_description %}
+                {{ art_one.keywords_description }}
+            {% else %}
+                {{ art_one.name }}
+            {% endif %}
+        {% elif oneGost %}
+            {{ oneGostGroup.name }} {{ oneGost }}
+        {% elif metallGroup %}
+            {{ metallGroup.name }}
+            {% if oneMarka %}
+                  {{ oneMarka }}
+            {% endif %}
+        {% elif current_marka or current_gost or s1 or s2 or s3 or s4 or s5 or s6 or s7  %}
+              {{ current_menu.name }}
+                {% if current_marka %}{{ current_marka }}{% endif %}
+                {%  if current_gost %}{{ current_gost }}{% endif %}
+                {{ label_s1|lower }} {{ s1 }}
+                {% if s2 != "" and s1 != "" %}x{% endif %}
+                {{ label_s2|lower }} {{ s2 }}
+                {% if s2 != "" and s3 != "" %}x{% endif %}
+                {{ label_s3|lower }} {{ s3 }}
+                {% if s3 != "" and s4 != ""%}x{% endif %}
+                {{ label_s4|lower }} {{ s4 }} {{ label_s5|lower }} {{ s5 }} {{ label_s6|lower }} {{ s6 }} {{ label_s7|lower }} {{ s7 }}
+               {{ current_filial.name_p }} купить со склада из наличия и под заказ. Звоните! 📞 {{ current_filial.phone_dop }}
+        {% elif current_category.keywords_description %}
+            Купить {{ current_category.keywords_description }}. По низкой цене. Склад в городе {{ current_filial.name }}, скидка на доставку 12%.
+        {% else %}
+            {% if current_menu.keywords_description %}
+                {{ current_menu.keywords_description }} {{ current_filial.name_p }}, скидка на 🚛 доставку 12%. Звоните! 📞 {{ current_filial.phone_dop }}
+            {% else %}
+                {{ keywords.description }}
+            {% endif %}
+        {% endif %}
+    "/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:image" content="https://{{ request.get_host }}{% if current_menu.image %}{{ MEDIA_URL }}{{ current_menu.image }}{% else %}{{ STATIC_URL }}img/pkfcvet.png{% endif %}"/>
+    <meta property="og:image:alt" content="{% if page_title == 'Главная' %}ПФ КВЕТ{% elif page_title %}{{ page_title }}{% else %}{{ current_menu.name }}{% endif %}">
+
+    {% if '/page/' in request.path %}
+    <link rel="canonical" href="https://{{ request.get_host }}/{{ current_menu.slug }}{% if current_marka %}/{{ current_marka.name_lat }}{% endif %}{% if current_gost != None %}/{{ current_gost.number_lat }}{% endif %}{% if s1 != "" %}/1s/{{ s1|my_slugify }}{% endif %}{% if s2 != "" %}/2s/{{ s2|my_slugify }}{% endif %}{% if s3 != "" %}/3s/{{ s3|my_slugify }}{% endif %}{% if s4 != "" %}/4s/{{ s4|my_slugify }}{% endif %}{% if s5 != "" %}/5s/{{ s5|my_slugify }}{% endif %}{% if s6 != "" %}/6s/{{ s6|my_slugify }}{% endif %}{% if s7 != "" %}/7s/{{ s7|my_slugify }}{% endif %}/">
+    {% endif %}
+    {{ current_filial.text_head_filial|safe }}
+    {{ contacts.text_head|safe }}
+    {% block extra_block_head %}{% endblock %}
+    {% endnospaces %}
+  </head>
+  <body>
+   {% comment %} {% nospaces %} {% endcomment %}
+
+    {% include "tags/popup_get_price.html" %}
+    {% include "tags/popup_windows.html" %}
+
+    <div id="page">
+        {% block site_wrapper %}{% endblock %}
+    </div>
+
+
+    <script src="{% static 'libs/jquery/dist/jquery.js' %}"></script>
+    <script src="{% static 'libs/bootstrap/dist/js/bootstrap.js' %}"></script>
+    <script src="{% static 'libs/jasny-bootstrap/dist/js/jasny-bootstrap.js' %}"></script>
+    <script src="{% static 'libs/swiper/dist/js/swiper.js' %}"></script>
+    <script src="{% static 'libs/slick-carousel/slick/slick.js' %}"></script>
+    <script src="{% static 'libs/lightbox2/dist/js/lightbox.js' %}"></script>
+    <script src="{% static 'libs/magnific-popup/dist/jquery.magnific-popup.js' %}"></script>
+    <script src="{% static 'libs/tabcomplete/tabcomplete.js' %}"></script>
+    <script src="{% static 'libs/liveFilter/livefilter.min.js' %}"></script>
+    <script src="{% static 'libs/bootstrap-select/bootstrap-select.js' %}"></script>
+    <script src="{% static 'libs/jquery.mmenu.all.js' %}"></script>
+    <script src="{% static 'libs/jQuery.mmenu-master/dist/translations/ru/jquery.mmenu.ru.js' %}"></script>
+    <script src="{% static 'libs/filterlist/filterlist.min.js' %}"></script>
+    <script src="{% static 'libs/readmore-js/readmore.js' %}"></script>
+    <script src="{% static 'js/pkf.js' %}?v=1"></script>
+    <script src="{% static 'js/form_handler.js' %}"></script>
+    <!-- end Scripts-->
+
+    <script id="js-urls" type="application/json">
+        {
+            "send_form_order": "{% url 'menu:send_form_order' %}",
+            "get_cart_count": "{% url 'menu:get_cart_count' %}",
+            "get_filter_url": "{% url 'menu:get_filter_url' %}"
+        }
+    </script>
+
+    {{ current_filial.text_body_filial|safe }}
+    {{ contacts.text_body|safe }}
+   {% comment %} {% endnospaces %} {% endcomment %}
+   {% include 'modal/modal_cookies_new.html' %}
+   {% block extra_block_body %}{% endblock %}
+  </body>
+</html>

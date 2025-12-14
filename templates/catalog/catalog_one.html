@@ -1,0 +1,14 @@
+{# ------- catalog_one.html -------#}
+
+<h4> {{ current_menu.name }}
+    {% if current_menu.parent %}
+        >> {{ current_menu.parent }}
+    {% endif %}
+</h4>
+<h2> {{ current_izdelie.name }}</h2>
+
+<div class="container">
+    <div class="divider"></div>
+</div>
+
+{# ------- end catalog_one.html -------#}

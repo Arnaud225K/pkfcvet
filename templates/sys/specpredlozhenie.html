@@ -1,0 +1,12 @@
+{% extends "catalog.html" %}
+{% load catalog_filters %}
+{% block content %}
+
+    {% if specpredl_one %}
+        {% include "sys/specpredlozhenie_one.html" %}
+    {% else %}
+        {% include "sys/specpredlozhenie_list.html" %}
+    {% endif %}
+
+
+{% endblock %}

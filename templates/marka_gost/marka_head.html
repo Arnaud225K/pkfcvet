@@ -1,0 +1,58 @@
+{% extends "catalog.html" %}
+{% block content %}
+    {% include "sys/breadcrumb.html" %}
+
+    <!-- GOST-table content-->
+    <div class="gost-table-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="heading-undelined">{{ metall }}</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="category-description">
+              <p class="text-content">
+              </p>
+            </div>
+            <div class="category-description-mobile"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+
+              {% for item in metall.get_list_metall_group %}
+                    <table class="table table-bordered gost-table">
+                      <thead>
+                        <tr>
+                          <th colspan="5">{{ item.name }}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                        {% for sub_item in item.get_list_marka_metall %}
+                          <td><a href="{{ sub_item.get_absolute_url }}">{{ sub_item.name }}</a></td>
+                            {% if forloop.counter|divisibleby:5 %}
+                                </tr>
+                                <tr>
+                            {% endif %}
+                        {% endfor %}
+
+                        </tr>
+                      </tbody>
+                    </table>
+              {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end GOST-table content-->
+    <!-- section Callback category-->
+    {% include "sys/callback.html" %}
+    <!-- end section Callback category-->
+    <!-- Subsection info pages-->
+    {% include "sys/subsection_navigate.html" %}
+    <!-- end Subsection info pages-->
+
+{% endblock %}

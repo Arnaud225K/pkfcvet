@@ -1,0 +1,61 @@
+{% extends "catalog.html" %}
+{% block content %}
+    {% include "sys/breadcrumb.html" %}
+    <!-- Vacancy-->
+    <div class="vacancy-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="heading-undelined">{{ current_menu.name }}</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="category-description">
+              <p class="text-content hidden-xs">
+                {{ current_menu.description|safe }}
+              </p>
+              <div class="well">
+                Ждём ваше резюме на почту:
+                <a href="mailto:hr@pkfcvet.ru" class="email">hr@pkfcvet.ru</a> (кандидатов без резюме - не рассматриваем!)
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="vacancies">
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+              <div id="accordion-vacancy" class="panel-group">
+
+
+                  {% for item in vacancy_list %}
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h3 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-vacancy" href="#collapse-{{ item.id }}-vacancy" class="accordion-toggle">{{ item.name }}</a></h3>
+                          </div>
+                          <div id="collapse-{{ item.id }}-vacancy" class="panel-collapse collapse">
+                            <div class="panel-body">
+                              <div class="row">
+                                <div class="col-xs-12 col-sm-12">
+                                  {{ item.text|safe }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                  {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end Vacancy-->
+    <!-- section Callback category-->
+    {% include "sys/callback.html" %}
+    <!-- end section Callback category-->
+    <!-- Subsection vacancy-->
+    {% include "sys/subsection_navigate.html" %}
+    <!-- end Subsection vacancy-->
+
+{% endblock %}

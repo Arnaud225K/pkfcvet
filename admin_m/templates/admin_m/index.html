@@ -1,0 +1,67 @@
+{% extends "admin_m/catalog.html" %}
+{% block content %}
+{% comment %} <script src="{{ static_admin_url }}bower_components/jquery/dist/jquery.min.js"></script> {% endcomment %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="/"><i class="fa fa-edit"></i> Главная</a></li>
+            <li class="active">Приветствие</li>
+        </ol>
+    </section>
+
+    <section class="content">
+        <div class="row">
+
+            <div class="col-xs-12">
+                <h1> Добро пожаловать, {{ request.user.get_full_name }}!</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><strong>Панель управления:</strong></h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="box-body chart-responsive">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <a href="{% url 'admin_m:admin_m_import' %}" class="btn btn-primary bg-gradient-primary btn-lg" style="width: 100%;">Импорт</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body chart-responsive">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <a href="{% url 'admin_m:admin_m_export' %}"
+                                            class="btn btn-primary bg-gradient-primary btn-lg" style="width: 100%;">Экспорт</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</div>
+
+</section>
+<!-- /.content -->
+</div>
+
+<!-- /.content-wrapper -->
+{% endblock %}

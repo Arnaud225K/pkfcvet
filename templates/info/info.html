@@ -1,0 +1,45 @@
+{% extends "catalog.html" %}
+{% block content %}
+    {% include "sys/breadcrumb.html" %}
+    <!-- Info page-->
+    <div class="info-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="heading-undelined">{{ current_menu.name }}</h1>
+          </div>
+        </div>
+        {{ current_menu.description|safe }}
+
+
+         {% for item in current_menu.get_child_menu %}
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 ib-col">
+                      <div class="thumbnail">
+                        <div class="thumbnail-img"><a href="{{ item.get_absolute_url }}"><img style="height: 150px;width: 100%;object-fit: cover;" src="{{ MEDIA_URL }}{{ item.image }}" alt="" class="img-responsive"></a></div>
+                        <div class="thumbnail-description thumbnail-description-dropdown"><a href="{{ item.get_absolute_url }}">
+                            <h3>{{ item.name }}</h3></a>
+                        </div>
+                      </div>
+                    </div>
+         {% endfor %}
+      </div>
+    </div>
+
+    <!-- end Info page-->
+    <!-- section Callback category-->
+    {% include "sys/callback.html" %}
+    <!-- end section Callback category-->
+    <!-- Subsection info pages-->
+    {% include "sys/subsection_navigate.html" %}
+    <!-- end Subsection info pages-->
+{% endblock %}
+{% block extra_block_head %}
+  {% if current_menu.oplata %}
+    {{ current_menu.oplata|safe }}
+  {% endif %}
+{% endblock %}
+{% block extra_block_body %}
+  {% if current_menu.dostavka %}
+    {{ current_menu.dostavka|safe }}
+  {% endif %}
+{% endblock %}

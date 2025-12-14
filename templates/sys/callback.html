@@ -1,0 +1,50 @@
+{% load static %}
+
+<div style="background-image: url('{% static 'img/getimage.jpg' %}')" class="section section-callback-category bg-cover-07 text-white">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="h2">Оставьте заявку прямо сейчас</div>
+        <p>Заполните форму и наш менеджер перезвонит вам в течение 15 минут для уточнения заказа</p>
+      </div>
+      <div class="col-md-4">
+
+        <form method="POST" id="order-phone-callback-form" class="ajax-form" action="{% url 'menu:send_form_order' %}">
+            {% csrf_token %}
+            
+            <input name="robot2" type="hidden" value="True">
+            <input name="robot" type="hidden" value="">
+            <input type="hidden" name="email" value="consultation@pfkvet.ru">
+            
+            <input name="text" type="hidden" value="Оставьте заявку прямо сейчас">
+            <input name="form_type" type="hidden" value="consultation_request">
+            
+          <div class="form-group has-feedback">
+            <input type="text" name="name" placeholder="Ваше имя..." class="form-control">
+            <p class="c-red error-field" data-field-name="name"></p>
+          </div>
+          <div class="form-group has-feedback">
+            <input type="text" name="phone" placeholder="Ваш телефон..." class="form-control">
+            <p class="c-red error-field" data-field-name="phone"></p>
+          </div>
+          <div class="personal-data">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="consent" value="True">Я принимаю условия <a target="_blank" href="/informatsija__politika_obrabotki_dannyh/">политики конфиденциальности</a>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="consent_2" value="True" required>Я выражаю <a target="_blank" href="/soglasie-na-obrabotku-personalnyh-dannyh/">согласие на обработку персональных данных</a>
+              </label>
+              <p class="c-red error-field" data-field-name="consent_2"></p>
+            </div>
+          </div>
+          
+          <button type="submit" class="btn btn-block btn-pkf">Перезвоните мне</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>

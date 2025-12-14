@@ -1,0 +1,164 @@
+<!-- category_top_parent.html -->
+
+    <!-- Breadcrumb-->
+    {% include "sys/breadcrumb.html" %}
+    <!-- end Breadcrumb-->
+    <div class="category-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="heading-undelined">{{ current_menu.name }}</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="category-description">
+              <p>
+{#               Компания ПКФ Цвет реализует {{ current_menu.name }} оптом и в розницу, с гарантией высокого качества и по доступным ценам.#}
+{#                Для консультации по вопросам выбора, приобретения и стоимости продукции звоните нашим менеджерам по телефону в городе {{ current_filial.name }}#}
+                  Компания «ПФ КВЕТ» реализует {{ current_menu.name_p }} оптом и в розницу, с гарантией высокого качества и по доступным ценам. Закажите {{ current_menu.name_p }} со склада {{ current_filial.name_p }}.<br/>
+            Для консультации по вопросам выбора, приобретения и стоимости продукции звоните нашим менеджерам - <b><a href="tel:{{ current_filial.phone_href }}" class="phone phone_xclid">{{ current_filial.phone }}</a></b><br/>
+            Также вы можете написать нам на почту - <b><i aria-hidden="true" class="fa fa-envelope-o"></i><a href="mailto:{{ current_filial.email }}" class="email_xclid" target="_blank" onclick="{{ button_email|safe }}">{{ current_filial.email }}</a></b>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="category-content-card">
+
+            {% for item in current_menu.get_child_menu_dop  %}
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 ib-col">
+                  <div class="thumbnail">
+                    <div class="thumbnail-img"><a href="{{ item.get_absolute_url }}"><img style="height: 150px;width: 100%;object-fit: cover;" src="{{ MEDIA_URL }}{{ item.image }}" loading="lazy" alt="{{ item.name }}" class="img-responsive"></a></div>
+                    {% if item.get_child_menu %}
+                    <div class="thumbnail-description thumbnail-description-dropdown"><a href="{{ item.get_absolute_url }}">
+                        <h3>{{ item.name }}</h3></a>
+                      <span data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="dropdownMenu{{ forloop.counter }}" class="thumbnail-dropdown-toggle"><i class="fa fa-chevron-down"></i></span>
+                      <ul aria-labelledby="dropdownMenu{{ forloop.counter }}" class="dropdown-menu dash-line-list">
+
+                          {% for sub_item in item.get_child_menu %}
+                                <li><a href="{{ sub_item.get_absolute_url }}">{{ sub_item.name }}</a></li>
+                          {% endfor %}
+                      </ul>
+                    </div>
+                    {% else %}
+                    <div class="thumbnail-description"><a href="{{ item.get_absolute_url }}">
+                      <h3>{{ item.name }}</h3></a>
+                  </div>
+                    {% endif %}
+                  </div>
+                </div>
+            {% endfor %}
+           </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <h2>{{ current_menu.name }}</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8">
+            <div class="category-description">
+                {{ current_menu.description|safe }}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="pricelist-download">
+              <div class="media">
+                  {% if pricelist_main %}
+                    <div class="media-left"><i aria-hidden="true" class="fa fa-file-text-o"></i></div>
+
+                    <div class="media-body"><a target="_blank" href="{{ MEDIA_URL }}{{ pricelist_main.file }}" download>Скачать прайс-лист</a>
+                      <p>Прайс-лист обновлен: {{ pricelist_main.date }}</p>
+                    </div>
+                  {% endif %}
+              </div>
+            </div>
+            <div class="questionnaire-download">
+              <div class="media">
+                  {% if opros_main %}
+                    <div class="media-left"><i aria-hidden="true" class="fa fa-file-text-o"></i></div>
+
+                    <div class="media-body"><a target="_blank" href="{{ MEDIA_URL }}{{ opros_main.file }}" download>Скачать опросный лист</a>
+                      <p>
+                        Отправить заполненный опросный лист можно на
+                        <a href="#" class="email">{{ current_filial.email }}</a>
+                      </p>
+                    </div>
+                  {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Section Callback Category-->
+    {% include "sys/callback.html" %}
+    <!-- end Section Callback Category-->
+    {% if current_menu.get_main_sertificates %}
+        <section class="section bg-gray section-certificates">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="h3">Сертификаты</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div id="mp-certificates-slider" class="wrap-slick">
+                    {% for item in current_menu.get_main_sertificates %}
+                        <div><a href="{{ MEDIA_URL }}{{ item.image }}" data-lightbox="certificates" data-title="1"><img style="height: 150px;width: 100%;object-fit: cover;" src="{{ MEDIA_URL }}{{ item.image }}" loading="lazy" alt="{{ item.name }}" class="img-responsive"></a></div>
+                    {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+    {% endif %}
+    <!--Модальное окно "Информация об оплате и отгрузке"-->
+    <div id="modal-product-payment" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog modal-dialog_product-payment">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+            <div class="clearfix"></div>
+            <div class="modal-title text-center">Оплата и отгрузка</div>
+          </div>
+          <div class="modal-body">
+            <p>Разнообразный и богатый опыт новая модель организационной деятельности позволяет оценить значение модели развития. Идейные соображения высшего порядка, а также консультация с широким активом способствует подготовки и реализации модели развития. Задача организации, в особенности же сложившаяся структура организации позволяет оценить значение позиций, занимаемых участниками в отношении поставленных задач. Задача организации, в особенности же новая модель организационной деятельности позволяет выполнять важные задания по разработке новых предложений. Разнообразный и богатый опыт реализация намеченных плановых заданий позволяет выполнять важные задания по разработке новых предложений.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Модальное окно "Информация о доставка"-->
+    <div id="modal-product-delivery" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog modal-dialog_product-delivery">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+            <div class="clearfix"></div>
+            <div class="modal-title text-center">Способы доставки</div>
+          </div>
+          <div class="modal-body">
+            <p>Разнообразный и богатый опыт новая модель организационной деятельности позволяет оценить значение модели развития. Идейные соображения высшего порядка, а также консультация с широким активом способствует подготовки и реализации модели развития. Задача организации, в особенности же сложившаяся структура организации позволяет оценить значение позиций, занимаемых участниками в отношении поставленных задач. Задача организации, в особенности же новая модель организационной деятельности позволяет выполнять важные задания по разработке новых предложений. Разнообразный и богатый опыт реализация намеченных плановых заданий позволяет выполнять важные задания по разработке новых предложений.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Модальное окно "Информация о условиях возврата"-->
+    <div id="modal-product-return" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog modal-dialog_product-delivery">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+            <div class="clearfix"></div>
+            <div class="modal-title text-center">Условия возврата</div>
+          </div>
+          <div class="modal-body">
+            <p>Разнообразный и богатый опыт новая модель организационной деятельности позволяет оценить значение модели развития. Идейные соображения высшего порядка, а также консультация с широким активом способствует подготовки и реализации модели развития. Задача организации, в особенности же сложившаяся структура организации позволяет оценить значение позиций, занимаемых участниками в отношении поставленных задач. Задача организации, в особенности же новая модель организационной деятельности позволяет выполнять важные задания по разработке новых предложений. Разнообразный и богатый опыт реализация намеченных плановых заданий позволяет выполнять важные задания по разработке новых предложений.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- end category_top_parent.html -->

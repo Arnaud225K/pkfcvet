@@ -1,0 +1,75 @@
+{% extends "catalog.html" %}
+{% load catalog_filters %}
+{% block content %}
+
+        <!-- Order page-->
+    <div class="order-success-content bg-gray">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1>Спасибо за заявку!</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="order-success-content_description">
+              <p class="text-content">В ближайшее время с вами свяжется менеджер для подтверждения.</p>
+              <p class="text-content">
+                Если у вас есть вопросы, пожалуйста, позвоните нам по бесплатному номеру
+                <b>{{ current_filial.phone }}</b>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end Order page-->
+    <!-- section Newsletter-->
+    <script>
+        function order_email() {
+            var msg = $('#order_email').serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/orderphone_new',
+                data: msg,
+                success: function (data) {
+                    $('.results').html(data);
+                    alert('Заявка успешно добавлена! \nБлагодарим Вас за обращение в компанию ПКФ Цвет\nВ скором времени с вами свяжется менеджер');
+                    document.getElementById('order_phone').reset();
+    {#                document.getElementById('parent_popup').style.display = 'none';#}
+                    document.location.href="/";
+                },
+                error: function () {
+                    alert("Пожалуйста, введите корректный адрес электронной почты.");
+                }
+            });
+        }
+    </script>
+    <form method="POST" id="order_email" action="javascript:void(null);" onsubmit="order_email(); {{ form_podpiska_novosti|safe }}">
+      <input name="robot" type="hidden" class="myinput" value="">
+      <input name="name" type="hidden" value="Клиент">
+      <input name="phone" type="hidden" value="----------">
+      <input name="text" type="hidden" value="Заказ рассылки">
+      <input name="consent" type="hidden" value="True">
+      <input name="consent_2" type="hidden" value="True">
+        <div class="section section-newsletter">
+          <div class="container">
+            <div class="row">
+              <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 ib-col">
+                <div class="section-newsletter_description">
+                  <p>Подпишитесь на новостную рассылку чтобы всегда быть в курсе скидок и акций</p>
+                </div>
+              </div>
+
+              <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 ib-col">
+                <input type="email" name="email" value="" placeholder="Ваш email..." class="form-control input-newsletter">
+              </div>
+              <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 ib-col">
+                  <a class="btn btn-block btn-pkf" onclick="{{ button_podpiska_email|safe }}" href="javascript:order_email()">Подписаться на рассылку</a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+    </form>
+{% endblock %}

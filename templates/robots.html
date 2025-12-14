@@ -1,0 +1,6 @@
+{% if robots_txt %}
+{{ robots_txt|safe }}
+{% else %}
+User-agent: *
+Disallow: /
+{% endif %}

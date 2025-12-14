@@ -1,0 +1,47 @@
+{% extends "catalog.html" %}
+{% block content %}
+    <!-- Breadcrumb-->
+    {% include "sys/breadcrumb.html" %}
+    <!-- end Breadcrumb-->
+        <!-- Contacts page-->
+    <div class="contacts-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="heading-undelined"><span itemprop="name">Контакты</span></h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 col-sm-4 col-md-4 ib-col">
+            <div class="contacts-item">
+              <div class="contacts-item-title">Адрес:</div>
+              <div class="contacts-item-description"><span itemprop="address">{{ current_filial.address }}</span></div>
+            </div>
+            <div class="contacts-item">
+              <div class="contacts-item-title"> Телефон:</div>
+              <div class="contacts-item-description"><span itemprop="telephone"><a href="tel:{{ current_filial.phone_href }}" class="phone phone_xclid">{{ current_filial.phone }}</a></span></div>
+            </div>
+            <div class="contacts-item">
+              <div class="contacts-item-title">Электронная почта:</div>
+              <div class="contacts-item-description"><span itemprop="email"><a href="mailto:{{ current_filial.email }}" onclick="{{ email_contact|safe }}">{{ current_filial.email }}</a></span></div>
+            </div>
+            <div class="contacts-item">
+              <div class="contacts-item-title">Время работы:</div>
+              <div class="contacts-item-description"><time itemprop="openingHours" datetime="{{ current_filial.rezhim }}">{{ current_filial.rezhim }}</time></div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-8 col-md-8 ib-col">
+            <div class="ya-map">
+                <script type="text/javascript" charset="utf-8" async="" src="{{ current_filial.geo  }}&amp;width=100%25&amp;height=300&amp;lang=ru_RU&amp;scroll=false"></script>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end Contacts page-->
+    {% include "sys/callback.html" %}
+    <!-- Subsection contacts-->
+    {% include "sys/subsection_navigate.html" %}
+    <!-- end Subsection contacts-->
+{% endblock %}

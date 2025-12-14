@@ -1,0 +1,208 @@
+{% extends "admin_m/catalog.html" %}
+{% block content %}
+    <script src="{{ static_admin_url }}bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>Экспорт</h1>
+            <ol class="breadcrumb">
+                <li><a href="{% url 'admin_m:admin_m_home' %}"><i class="fa fa-edit"></i> Главная</a></li>
+                <li class="active">Экспорт</li>
+            </ol>
+        </section>
+
+ <!-- Main content -->
+
+    <section class="content">
+
+        <div class="row">
+                <div class="col-xs-12">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                    <h3 class="box-title"><strong>Экспорт позиций:</strong></h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                    </div>
+                    <div class="box-body chart-responsive">
+                    <form role="form" id="form_result" method="post" action="javascript:void(0)" onsubmit="get_result();">
+                    {% csrf_token %}
+                        <div class="col-xs-12">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                <label>Категория:</label>
+                                <select class="form-control select2" name="name" style="width: 100%;">
+                                    <option selected="selected">{{ default_option }}</option>
+                                    {% for item in category_list %}
+                                        <option>{{ item.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Электронная почта</label>
+                                    <input type="email" name="email" style="width: 100%;" oninvalid="setCustomValidity('Пожалуйста, введите корректно электронную почту')" onchange="try{setCustomValidity('')}catch(e){}" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Выгрузить редиректы</label>
+                                    <input type="checkbox" name="redirect">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                              <div class="form-group">
+                                <button type="submit" class="btn btn-primary" style="width: 100%;">Экспортировать</button>
+                              </div>
+                            </div>
+                        </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+            <div class="box">
+                <!-- /.box-header -->
+                <div class="box-body" id="table_item">
+                {% if 1 %}
+                <div align="right">Показано записей: {{ items_count_show }} {% if items_count_show != items_count_all %}(всего: {{ items_count_all }}){% endif %}</div>
+                <table id="items-table" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Категория</th>
+                            <th>Дата</th>
+                            <th>Пользователь</th>
+                            <th>E-mail</th>
+                            <th>Готовность</th>
+                            <th>Ссылка</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items_list %}
+                        <tr>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.date }}</td>
+                            <td>{{ item.user }}</td>
+                            <td>{{ item.email }}</td>
+                            <td>{{ item.result }}</td>
+                            <td>{% if item.link %}<a href='{{ item.get_full_link }}'>{{ item.link }}</a>{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                    Информация отсутствует
+                {% endif %}
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+            </div>
+        </div>
+        <!-- /.row (main row) -->
+            
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+
+    <script>
+        function get_result() {
+            form_data = new FormData($(form_result).get(0));
+            $.ajax({
+              url: '{% url 'admin_m:admin_m_export' %}',
+              type: 'POST',
+              contentType: false, // важно - убираем форматирование данных по умолчанию
+              processData: false, // важно - убираем преобразование строк по умолчанию
+              data: form_data,
+              success: function(data) {
+                  document.getElementById('table_item').innerHTML=data;
+                  $(function () {
+                        $('#items-table').DataTable({
+                        mark: {
+                            element: 'span',
+                            className: 'highlight'
+                        },
+                        "aaSorting": [],
+                        "pageLength": 50,
+                        "aLengthMenu": [[50, 100, 500], [50, 100, 500]],
+                        language: {
+                            "processing": "Подождите...",
+                            "search": "Поиск:",
+                            "lengthMenu": "Показать _MENU_ записей",
+                            "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                            "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                            "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                            "infoPostFix": "",
+                            "loadingRecords": "Загрузка записей...",
+                            "zeroRecords": "Записи отсутствуют.",
+                            "emptyTable": "В таблице отсутствуют данные",
+                            "paginate": {
+                                "first": "Первая",
+                                "previous": "Предыдущая",
+                                "next": "Следующая",
+                                "last": "Последняя"
+                            },
+                            "aria": {
+                                "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                                "sortDescending": ": активировать для сортировки столбца по убыванию"
+                            }
+                        }
+                        })
+                      });
+
+              },
+              error:  function(xhr, str){
+                  alert('Возникла ошибка: ' + xhr.responseCode);
+              }
+            });
+        }
+        
+
+        $(function () {
+            $('#items-table').DataTable({
+            mark: {
+                element: 'span',
+                className: 'highlight'
+            },
+            "aaSorting": [],
+            "pageLength": 50,
+            "aLengthMenu": [[50, 100, 500], [50, 100, 500]],
+            language: {
+                "processing": "Подождите...",
+                "search": "Поиск:",
+                "lengthMenu": "Показать _MENU_ записей",
+                "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                "infoPostFix": "",
+                "loadingRecords": "Загрузка записей...",
+                "zeroRecords": "Записи отсутствуют.",
+                "emptyTable": "В таблице отсутствуют данные",
+                "paginate": {
+                    "first": "Первая",
+                    "previous": "Предыдущая",
+                    "next": "Следующая",
+                    "last": "Последняя"
+                },
+                "aria": {
+                    "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                    "sortDescending": ": активировать для сортировки столбца по убыванию"
+                }
+            }
+            })
+          });
+    </script> 
+
+{% endblock %}

@@ -1,0 +1,245 @@
+{% extends "catalog.html" %}
+{% load static %}
+{% load cache %}
+
+
+
+{% block content %}
+  <!-- index.html -->
+    <!-- Slider-->
+      <div class="main-slider bg-gray">
+          <!-- Slider main container-->
+          <div class="swiper-container">
+              <!-- Additional required wrapper-->
+              <div class="swiper-wrapper">
+                  <!-- Slides-->
+                  {% for item in sliders %}
+                      {% if item.image %}
+                          <div class="swiper-slide">
+                              {% if item.url %}<a href="{{ item.url }}">{% endif %}
+                              <img 
+                                  src="{{ item.image.url }}" 
+                                  alt="{{ item.name }}" 
+                                  width="640" 
+                                  height="360" 
+                                  class="img-responsive"
+                                  loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                                  decoding="async"
+                              >
+                              {% if item.text or item.text_more %}
+                              <div class="main-slider__slide-info"> 
+                                  {% if item.text %}<div class="main-slider__slide-title">{{ item.text }}</div>{% endif %}
+                                  {% if item.text_more %}<div class="main-slider__slide-txt">{{ item.text_more }}</div>{% endif %}
+                              </div>
+                              {% endif %}
+                              {% if item.url %}</a>{% endif %}
+                          </div>
+                      {% endif %}
+                  {% endfor %}
+              </div>
+              <!-- If we need pagination-->
+              <div class="swiper-pagination"></div>
+          </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12">
+            <h1 class="h1_title_main">Черный, цветной и нержавеющий металлопрокат {{ current_filial.name_p }}</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end Slider-->
+
+{% cache 600 index_catalog current_filial.id %}
+    <!-- Tabs category-->
+    <section class="tabs-category">
+      <div class="container">
+        <div class="row">
+          <div class="hidden-xs hidden-sm col-md-12 col-lg-12">
+            <!-- Nav tabs-->
+            <ul role="tablist" class="nav nav-tabs">
+                {% for item in main_menus_catalog %}
+                    <li role="presentation" {% if forloop.first %}class="active"{% endif %}><a href="#{{ item.slug }}" aria-controls="{{ item.slug }}" role="tab" data-toggle="tab" class="nav-tabs_{{ forloop.counter }}">{{ item.name }}</a></li>
+                {% endfor %}
+            </ul>
+            <!-- Tab panes-->
+            <div class="tab-content">
+                {% for item in main_menus_catalog %}
+                    <div id="{{ item.slug }}" role="tabpanel" class="tab-pane {% if forloop.first %}active{% endif %}">
+                        <div class="row ib-row">
+                            {% if item.child_menus %}
+                                {% for sub_item in item.child_menus %}
+                                    <div class="col-xs-12 col-sm-6 col-md-3 ib-col">
+                                        <div class="tab-content_item">
+                                            <a href="{{ sub_item.get_absolute_url }}" class="thumbnail">
+                                                {% if sub_item.image %}
+                                                    <img style="height: 150px;width: 100%;object-fit: cover;" src="{{ sub_item.image.url }}" loading="lazy" alt="{{ sub_item.name }}">
+                                                {% endif %}
+                                            </a>
+                                            <a class="tab-content_item-title" href="{{ sub_item.get_absolute_url }}">
+                                                <h3>{{ sub_item.name }}</h3>
+                                            </a>
+                                            <ul class="dash-line-list">
+                                                {% for sub_sub_item in sub_item.child_sub_menus|slice:":5" %}
+                                                    <li><a href="{{ sub_sub_item.get_absolute_url }}">{{ sub_sub_item.name }}</a></li>
+                                                {% endfor %}
+                                            </ul>
+                                            <a href="{{ sub_item.get_absolute_url }}" class="text-color_red">Перейти в раздел</a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% elif item.get_list_product %}
+                                {% for product in item.get_list_product %}
+                                    <div class="col-xs-12 col-sm-6 col-md-3 ib-col">
+                                        <div class="tab-content_item">
+                                            <a href="{{ product.get_absolute_url }}" class="thumbnail">
+                                                {% if product.image %}
+                                                    <img style="height: 150px;width: 100%;object-fit: cover;" src="{{ product.image.url }}" loading="lazy" alt="{{ product.name }}">
+                                                {% endif %}
+                                            </a>
+                                            <a class="tab-content_item-title" href="{{ product.get_absolute_url }}">
+                                                <h3>{{ product.name }}</h3>
+                                            </a>
+                                            <a href="{{ product.get_absolute_url }}" class="text-color_red">Перейти в раздел</a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+          </div>
+          <!-- end Tabs category-->
+          <!-- Tabs category Nav (Mobile) -->
+          <div class="col-xs-12 col-sm-12 hidden-md hidden-lg">
+            <div id="accordion" class="panel-group">
+                {% for item in main_menus_catalog %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h3 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#{{ item.slug }}-d" class="accordion-toggle">{{ item.name }}</a></h3>
+                        </div>
+                        <div id="{{ item.slug }}-d" class="panel-collapse collapse">
+                          <div class="panel-body">
+                            <div class="row">
+                              <div class="col-xs-12">
+                                <ul>
+                                {% for sub_item in item.child_menus %}
+                                    <li><a href="{{ sub_item.get_absolute_url }}">{{ sub_item.name }}</a></li>
+                                {% endfor %}
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- end Tabs category Nav-->
+    {% endcache %}
+
+    <!-- Section about company-->
+    <section style="background-image: url({% static 'img/baner-7.jpg' %})" class="section section-about bg-cover text-white">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h4 class="h2 heading-undelined">{{ text_blocks_menu.name }}</h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+              {{ text_blocks_menu.text|safe }}
+           </div>
+        </div>
+      </div>
+    </section>
+    <!-- end Section about company-->
+    
+    <!-- Advantages-->
+    <section class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h4 class="h2 heading-undelined">Наши преимущества</h4>
+          </div>
+        </div>
+        <div class="feature-list-1">
+          <div class="row ib-row">
+              {% for item in advanteges_list %}
+              <div class="col-xs-12 col-md-4 col-sm-6 ib-col">
+                <div class="media">
+                  <div class="media-left">
+                    <img src="{{ item.image.url }}" width="60" height="60" loading="lazy" alt="{{ item.name }}">
+                  </div>
+                  <div class="media-body">
+                    {{ item.text|safe }}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- end Advantages-->
+
+    <!-- Recommendations-->
+    <section class="section bg-gray">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h4 class="h2 heading-undelined">Нас рекомендуют</h4>
+            <div id="mp-logo-slider" class="wrap-slick">
+                {% for item in partners_list %}
+                    {% if item.image %}
+                        <div><img src="{{ item.image.url }}" loading="lazy" alt="{{ item.name }}" width="156" height="156" class="img-responsive"></div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- end Recommendations-->
+
+    <!-- News-->
+    <section class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="h2 heading-undelined">Новости</div>
+          </div>
+        </div>
+        <div class="feature-list-2">
+          <div class="row">
+              {% for news_item in news_list %}
+                <div class="col-sm-6 col-md-6">
+                  <div class="media">
+                    <div class="media-left col-sm-6 col-md-6" >
+                        <a href="{{ news_item.get_absolute_url }}">
+                            <img style="width: 98%;height: 98%;" src="{{ news_item.image.url }}" loading="lazy" alt="news item" class="media-object">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                      <h4 class="media-heading">{{ news_item.name }}</h4>
+                      <span class="f-w-300">{{ news_item.date|date:"d.m.Y" }}</span>
+                      {{ news_item.description|safe }}
+                      <a href="{{ news_item.get_absolute_url }}">подробнее</a>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-center m-t-60"><a href="{% url 'news:news_list' %}" class="btn btn-pkf">Посмотреть все новости</a></div>
+        </div>
+      </div>
+    </section>
+    <!-- end News-->
+{% endblock %}

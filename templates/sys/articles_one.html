@@ -1,0 +1,136 @@
+ <!-- articles page-->
+
+
+     {% include "sys/breadcrumb.html" %}
+      <div class="articles-content">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <h1 class="heading-undelined">{{ art_one.name }}</h1>
+            </div>
+          </div>
+          <div class="articles-article">
+            <div class="row">
+              <div class="col-sm-12 col-md-12">
+                <div class="articles-description">
+                  <p>{{ art_one.description|safe  }}</p>
+                  <!--a(href='allarticles.html') Перейти к списку всех новостей-->
+                  <div class="category-content-card">
+                    <div class="row">
+                    {% if link_1 %}
+                      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 ib-col"><a href="{{ link_1.get_absolute_url }}">
+                          <div class="thumbnail">
+                            <div class="thumbnail-img"><img src="{{ MEDIA_URL }}{{ link_1.image }}" alt="{{ link_1.name }}" class="img-responsive"></div>
+                            <div class="thumbnail-description">
+                              <h3>{{ link_1.name }}</h3>
+                            </div>
+                          </div></a>
+                      </div>
+                    {% endif %}
+                    {% if link_2 %}
+                      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 ib-col"><a href="{{ link_2.get_absolute_url }}">
+                          <div class="thumbnail">
+                            <div class="thumbnail-img"><img src="{{ MEDIA_URL }}{{ link_2.image }}" alt="{{ link_2.name }}" class="img-responsive"></div>
+                            <div class="thumbnail-description">
+                              <h3>{{ link_2.name }}</h3>
+                            </div>
+                          </div></a>
+                      </div>
+                    {% endif %}
+                    {% if link_3 %}
+                      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 ib-col"><a href="{{ link_3.get_absolute_url }}">
+                          <div class="thumbnail">
+                            <div class="thumbnail-img"><img src="{{ MEDIA_URL }}{{ link_3.image }}" alt="{{ link_3.name }}" class="img-responsive"></div>
+                            <div class="thumbnail-description">
+                              <h3>{{ link_3.name }}</h3>
+                            </div>
+                          </div></a>
+                      </div>
+                    {% endif %}
+                    {% if link_4 %}
+                      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 ib-col"><a href="{{ link_4.get_absolute_url }}">
+                          <div class="thumbnail">
+                            <div class="thumbnail-img"><img src="{{ MEDIA_URL }}{{ link_4.image }}" alt="{{ link_4.name }}" class="img-responsive"></div>
+                            <div class="thumbnail-description">
+                              <h3>{{ link_4.name }}</h3>
+                            </div>
+                          </div></a>
+                      </div>
+                    {% endif %}
+                    </div>
+                  </div>
+                  <p>{{ art_one.text|safe }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% if art_list_last %}
+          <hr>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="h3">Другие статьи</div>
+            </div>
+          </div>
+          {% endif %}
+          <div class="feature-list-2">
+            <div class="row">
+            {% for itemArt in art_list_last|dictsortreversed:"date" %}
+              {% if itemArt != art_one %}
+              <div class="col-sm-6 col-md-4">
+                <div class="articles-item">
+                  <div class="media">
+                    <!--.media-left//img.media-object(src='img/news-item.jpg', alt='articles item')'m.d.Y'
+                    -->
+                    <div class="media-body">
+                      <h4 class="media-heading">{{ itemArt.name }}</h4>
+                      <div class="date-articles"><span>{{ itemArt.date|date:'m.d.Y' }}</span></div>
+                      <p>{{ itemArt.description|safe }}</p><a href="{{ itemArt.get_absolute_url_art }}">подробнее</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+            {% endfor %}
+{#              <div class="col-sm-6 col-md-4">#}
+{#                <div class="articles-item">#}
+{#                  <div class="media">#}
+{#                    <!--.media-left//img.media-object(src='img/news-item.jpg', alt='articles item')#}
+{#                    -->#}
+{#                    <div class="media-body">#}
+{#                      <h4 class="media-heading">Заголовок статьи</h4>#}
+{#                      <div class="date-articles"><span>21.04.2017</span></div>#}
+{#                      <p>Равным образом рамки и место обучения кадров обеспечивает широкому кругу (специалистов) участие в формировании дальнейших направлений развития.</p><a href="#">подробнее</a>#}
+{#                    </div>#}
+{#                  </div>#}
+{#                </div>#}
+{#              </div>#}
+{#              <div class="col-sm-6 col-md-4">#}
+{#                <div class="articles-item">#}
+{#                  <div class="media">#}
+{#                    <!--.media-left//img.media-object(src='img/news-item.jpg', alt='articles item')#}
+{#                    -->#}
+{#                    <div class="media-body">#}
+{#                      <h4 class="media-heading">Заголовок статьи</h4>#}
+{#                      <div class="date-articles"><span>21.04.2017</span></div>#}
+{#                      <p>Равным образом рамки и место обучения кадров обеспечивает широкому кругу (специалистов) участие в формировании дальнейших направлений развития.</p><a href="#">подробнее</a>#}
+{#                    </div>#}
+{#                  </div>#}
+{#                </div>#}
+{#              </div>#}
+              <!--.col-sm-6.col-md-6
+              .articles-item
+                  .media
+                      .media-left
+                          img.media-object(src='img/news-item.jpg', alt='articles item')
+                      .media-body
+                          h4.media-heading Заголовок статьи
+                          .date-articles
+                              span 21.04.2017
+                          p Равным образом рамки и место обучения кадров обеспечивает широкому кругу (специалистов) участие в формировании дальнейших направлений развития.
+                          a(href='#') подробнее
+              -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end articles page-->

@@ -1,0 +1,22 @@
+<ul id="navmenu-v">
+    {% for item in current_menu_main.get_child_menu %}
+        <li class='drop-link'><a href="{{ item.get_absolute_url }}">{{ item.name }}</a>
+            {% if item.get_child_menu %}
+                <ul class='drop-block'>
+                    {% for sub_item in item.get_child_menu %}
+                        <li class='drop-link'><a href="{{ sub_item.get_absolute_url }}">{{ sub_item.name }}</a>
+                            {% if sub_item.get_child_menu %}
+                                <ul class='drop-block'>
+                                    {% for sub_sub_item in sub_item.get_child_menu %}
+                                        <li class='drop-link'><a href="{{ sub_sub_item.get_absolute_url }}">{{ sub_sub_item.name }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>

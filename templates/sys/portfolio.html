@@ -1,0 +1,52 @@
+{% extends "catalog.html" %}
+{% load catalog_filters %}
+{% block content %}
+    <!-- oneNews.html -->
+<div class="main_page"><!-- main_page -->
+<div class="container">
+    <div class="main_page_box"><!-- main_page_box -->
+        <div style="padding: 5px; border: 1px solid #f6f4c4; -moz-border-radius: 3px; border-radius: 3px;">
+            <h3>{{ portfolio_one.name }}</h3>
+            <div class="p1">
+                {% if portfolio_one.image %}
+                    <figure class="img-new"><img src="/media/{{ portfolio_one.image }}" alt="{{ portfolio_one.name }}" width="200px"/></figure>
+                {% endif %}
+            </div>
+            {{ portfolio_one.text|safe }}
+            <div style="clear: both;"></div>
+            {% if portfolio_one.isHiddenVideo !=  1%}
+                {% if portfolio_one.video %}
+                    <div class="video">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ portfolio_one.video }}?rel=0" frameborder="0" allowfullscreen>
+                        </iframe>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+        <br>
+    <br>
+    <div style="clear: both;"></div>
+        <div class="h3">Другие наши работы</div>
+        <br>
+        {% for item in portfolio_list%}
+            {% if item != portfolio_one %}
+                <div style="padding: 5px; margin-bottom: 10px; border: 1px solid #f5f3d7; -moz-border-radius: 3px; border-radius: 3px;">
+                <h4>{{ item.name }}</h4>
+                <div class="p1">
+                    {% if item.image %}
+                        <figure class="img-new"><img src="/media/{{ item.image }}" alt="{{ item.name }}" width="200px"/></figure>
+                    {% endif %}
+                </div>
+                {{ item.description|safe }}
+                <div style="clear: both;"></div>
+                    <div>
+                        <a href="{{ item.get_absolute_url }}">Подробнее >></a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div> <!-- end main_box -->
+</div> <!-- end main_page -->
+<!-- end oneNews.html -->
+</div>
+{% endblock %}

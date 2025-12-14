@@ -1,0 +1,102 @@
+{% extends "catalog.html" %}
+{% block content %}
+    {% include "sys/breadcrumb.html" %}
+   <!-- Certificate content-->
+    <div class="certificate-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="heading-undelined">{{ current_menu.name }}</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="category-description">
+              <p class="text-content hidden-xs">
+                  {{ current_menu.description|safe }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="certificate">
+
+
+
+              {% for item in sertificats_list %}
+                  {% if forloop.counter == 1 %}
+                    <div class="certificate-item">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <h3>{{ item.group.name }}</h3>
+                          </div>
+                        </div>
+                        <div class="row">
+                  {% elif item.title_main %}
+                        </div>
+                      </div>
+                      <div class="certificate-item">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <h3>{{ item.group.name }} {{ sertificats_list.has_previous.group.name }}</h3>
+                          </div>
+                        </div>
+                        <div class="row">
+
+                  {% endif %}
+
+
+                  <div class="col-xs-12 col-sm-6 col-md-3 ib-col"><a href="{{ MEDIA_URL }}{{ item.image }}" data-lightbox="certificate-img" data-title="{{ item.name }}"><img src="{{ MEDIA_URL }}{{ item.image }}" alt="{{ item.name }}" class="img-responsive"></a>
+                    <p class="title-certificate-img">{{ item.name }}</p>
+                  </div>
+            {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="bs-example">
+                  <ul class="pagination">
+                      {% if not sertificats_list.has_previous %}
+                        <li class="disabled"><a>«</a></li>
+                      {% else %}
+                        <li><a href="{{ URL_PAGE_SERT }}{{ sertificats_list.previous_page_number }}/">«</a></li>
+                      {% endif %}
+                      {% for num in sertificats_list.paginator.page_range %}
+                          {% if num > paginatorMin and num < paginatorMax or forloop.counter == 1 or forloop.revcounter == 1 %}
+                            {% if forloop.revcounter == 1 and paginatorMax < forloop.counter %}
+                                <li><a>...</a></li>
+                            {% endif %}
+                            {% ifequal num sertificats_list.number %}
+                                <li class="active"><a>{{ num }}</a></li>
+                            {% else %}
+                                {% if forloop.counter == 1 %}
+                                    <li><a href="{{ URL_PAGE_SERT }}">{{ num }}</a></li>
+                                {% else %}
+                                    <li><a href="{{ URL_PAGE_SERT }}{{ num }}/">{{ num }}</a></li>
+                                {% endif %}
+                            {% endifequal %}
+                            {% if forloop.counter == 1 and paginatorMin > 2 %}
+                                <li><a>...</a></li>
+                            {% endif %}
+                          {% endif %}
+                      {% endfor %}
+                      {% if not sertificats_list.has_next %}
+                        <li class="disabled"><a>»</a></li>
+                      {% else %}
+                        <li><a href="{{ URL_PAGE_SERT }}{{ sertificats_list.next_page_number }}/">»</a></li>
+                      {% endif %}
+                  </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end Certificate content-->
+    <!-- section Callback category-->
+    {% include "sys/callback.html" %}
+    <!-- end section Callback category-->
+    <!-- Subsection certificate-->
+    {% include "sys/subsection_navigate.html" %}
+    <!-- end Subsection certificate-->
+
+{% endblock %}

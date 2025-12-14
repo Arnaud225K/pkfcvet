@@ -1,0 +1,46 @@
+{% extends "catalog.html" %}
+{% block content %}
+    {% include "sys/breadcrumb.html" %}
+   <!-- requisites content-->
+    <div class="requisites-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="heading-undelined">Реквизиты</h1>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-8 col-md-8">
+              {% if current_filial.req %}
+                  {{ current_filial.req|safe }}
+              {% else %}
+                  {{ current_menu.description|safe }}
+              {% endif %}
+          </div>
+          <div class="col-sm-4 col-md-4">
+            <div class="pricelist-download">
+              <div class="media">
+                <div class="media-left"><i aria-hidden="true" class="fa fa-file-text-o"></i></div>
+                <div class="media-body"><a href="/pkfcvet.pdf" download onclick="{{ card_company|safe }}">Скачать карточку предприятия</a></div>
+              </div>
+            </div>
+            <div class="questionnaire-download">
+              <div class="media">
+                <div class="media-left"><i aria-hidden="true" class="fa fa-file-text-o"></i></div>
+                <div class="media-body"><a href="/INN.pdf" download onclick="{{ card_inn|safe }}">Скачать ИНН</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end requisites content-->
+    <!-- section Callback category-->
+    {% include "sys/callback.html" %}
+    <!-- end section Callback category-->
+    <!-- Subsection info pages-->
+    {% include "sys/subsection_navigate.html" %}
+    <!-- end Subsection info pages-->
+{% endblock %}

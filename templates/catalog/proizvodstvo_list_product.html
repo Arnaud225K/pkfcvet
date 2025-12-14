@@ -1,0 +1,79 @@
+    <!-- All services content-->
+    <!-- Breadcrumb-->
+    {% include "sys/breadcrumb.html" %}
+    <!-- end Breadcrumb-->
+    <div class="category-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="heading-undelined">{{ current_menu.name }}</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="category-description">
+{#              <p class="text-content hidden-xs">Таким образом укрепление и развитие структуры требуют от нас анализа форм развития. Не следует, однако забывать, что укрепление и развитие структуры представляет собой интересный эксперимент проверки системы обучения кадров, соответствует насущным потребностям. Таким образом новая модель организационной деятельности позволяет оценить значение позиций, занимаемых участниками в отношении поставленных задач. Идейные соображения высшего порядка, а также новая модель организационной деятельности позволяет оценить значение существенных финансовых и административных условий. Не следует, однако забывать, что сложившаяся структура организации требуют определения и уточнения систем массового участия. Таким образом начало повседневной работы по формированию позиции влечет за собой процесс внедрения и модернизации направлений прогрессивного развития.</p>#}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="category-content-card">
+
+              {% for item in current_menu.get_list_product %}
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 ib-col"><a href="{{ item.get_absolute_url }}">
+                    <div class="thumbnail">
+                      <div class="thumbnail-img"><img src="{{ MEDIA_URL }}{{ item.image }}" loading="lazy" alt="{{ item.name }}" class="img-responsive"></div>
+                      <div class="thumbnail-description">
+                        <h3>{{ item.name }}</h3>
+                      </div>
+                    </div></a>
+                </div>
+              {% endfor %}
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <h2>{{ current_menu.name }} {{ current_filial.name }}</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="category-description">
+                {{ current_menu.description|safe }}
+             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end All services content-->
+    <!-- section Callback category-->
+    {% include "sys/callback.html" %}
+    <!-- end section Callback category-->
+    <!-- Other production-->
+    {% if usluga_main_list %}
+        <div class="section other-category bg-gray">
+          <div class="other-category__services">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="h3">Наши услуги</div>
+                </div>
+              </div>
+              <div class="row">
+                  {% for item in usluga_main_list %}
+                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 ib-col"><a href="{{ item.get_absolute_url }}">
+                            <div class="thumbnail">
+                              <div class="thumbnail-img"><img src="{{ MEDIA_URL }}{{ item.image }}" loading="lazy" alt="{{ item.name }}" class="img-responsive"></div>
+                              <div class="thumbnail-description">
+                                <h4>{{ item.name }}</h4>
+                              </div>
+                            </div></a></div>
+                  {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endif %}
+<!-- end Other production-->

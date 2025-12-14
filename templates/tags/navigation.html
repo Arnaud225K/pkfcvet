@@ -1,0 +1,367 @@
+{% load static %}
+{% load catalog_tags %}
+{% load cache %}
+
+
+
+
+    
+    <!--navigation-->
+     <div class="sticky-header-topbar">
+      <div class="container">
+        <div class="row">
+          <nav class="navbar">
+            <div class="hidden-xs hidden-sm col-md-3">
+              <ul class="nav navbar-nav">
+                    <li><a href="{{ specpredlozhenie_menu.get_absolute_url }}" class="price-discount">{{ specpredlozhenie_menu.name }}</a></li>
+              </ul>
+            </div>
+            <div class="col-xs-2 col-sm-1 hidden-md hidden-lg"><a href="#mmenu" class="main-menu-toggle"><i class="fa fa-bars"></i></a></div>
+            <div class="col-xs-10 col-sm-3 hidden-md hidden-lg text-center"><a href="tel:{{ current_filial.phone_href }}" onclick="{{ phone_besplatno|safe }}" class="phone phone_xclid">{{ current_filial.phone }}</a></div>
+            <div class="hidden-xs col-sm-4 col-md-3">
+
+              <form role="search" class="navbar-search" action="{% url "search:search_results" %}" method="get"> 
+                <div class="input-group stylish-input-group">
+                    {{ form.q }}
+                    <input type="search" placeholder="Поиск" class="form-control input-sm search" name="s"><span class="input-group-addon">
+                    <button type="submit"><i aria-hidden="true" class="fa fa-search"></i></button></span>
+                </div>
+              </form>
+
+            </div>
+            <div class="hidden-xs hidden-sm col-md-6">
+              <ul class="nav navbar-nav navbar-right">
+                  {% for item in top_menu %}
+                      <li><a href="{{ item.get_absolute_url }}">{{ item.name }}</a>
+                  {% endfor %}
+                </li>
+              </ul>
+            </div>
+            <div class="hidden-xs col-sm-4 hidden-md hidden-lg"><a href="/cart/" class="btn btn-pkf order_cart">Оформить заявку <span class="badge"><span class="cart_item_count"> </span> шт</span></a></div>
+          </nav>
+        </div>
+      </div>
+    </div>
+<!-- Sticky header topbar-->
+      <div class="sticky-header-topbar">
+        <div class="container">
+          <div class="row">
+            <nav class="navbar">
+              <div class="hidden-xs hidden-sm col-md-3">
+                <ul class="nav navbar-nav">
+                  <li><a href="#" class="price-discount">Спецпредложения</a></li>
+                </ul>
+              </div>
+              <div class="col-xs-2 col-sm-1 hidden-md hidden-lg"><a href="#mmenu" class="main-menu-toggle"><i class="fa fa-bars"></i></a></div>
+              <div class="col-xs-10 col-sm-3 hidden-md hidden-lg text-center"><a href="tel:{{ current_filial.phone_dop_href }}" onclick="{{ phone_filial }}" class="mgo-8800 mobile-tel-callback">{{ current_filial.phone_dop }}</a></div>
+              <div class="hidden-xs col-sm-4 col-md-3">
+                <form role="search" class="navbar-search">
+                  <div class="input-group stylish-input-group">
+                    <input type="text" placeholder="Поиск" class="form-control input-sm search"><span class="input-group-addon">
+                      <button type="submit"><i aria-hidden="true" class="fa fa-search"></i></button></span>
+                  </div>
+                </form>
+              </div>
+              <div class="hidden-xs hidden-sm col-md-6">
+                <ul class="nav navbar-nav navbar-right">
+                  <li><a href="">Доставка</a></li>
+                    <li><a href="">Оплата и отгрузка</a></li>
+                    <li><a href="">География продаж</a></li>
+                  
+                </ul>
+              </div>
+              <div class="hidden-xs col-sm-4 hidden-md hidden-lg"><a href="/cart/" class="btn btn-pkf order_cart">Оформить заявку <span class="badge"><span class="cart_item_count"> </span> шт</span></a></div>
+            </nav>
+          </div>
+        </div>
+      </div>
+    <div class="sticky-header">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3 col-lg-3">
+            <div class="region"><i aria-hidden="true" class="fa fa-map-marker"></i><a href="#modal-region" data-toggle="modal" class="select-region">{{ current_filial.name }}</a></div>
+          </div>
+            <div class="col-md-5 col-lg-5">
+              <div class="sticky-header_catalog">
+                <ul class="list-inline">
+                  {% for item in top_menu %}
+                      <li><a href="{{ item.get_absolute_url }}">{{ item.name }}</a>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          <div class="col-md-2 col-lg-2"><a href="tel:{{ current_filial.phone_dop_href }}" class="phone mgo-8800" onclick="{{ phone_filial|safe }}">{{ current_filial.phone_dop }}</a></div>
+          <div class="col-md-2 col-lg-2"><a href="/cart/" class="btn btn-pkf order_cart" onclick="{{ button_oformit_zayavky|safe }}">Заявка <span class="badge"><span class="cart_item_count"> </span> шт</span></a></div>
+        </div>
+      </div>
+    </div>
+    <!-- end Sticky header topbar-->
+    <!-- Topbar-->
+    <header>
+      <div class="container">
+        <div class="row">
+          <nav class="navbar">
+            <div class="hidden-xs hidden-sm col-md-3">
+              <ul class="nav navbar-nav">
+                <li><a href="{{ specpredlozhenie_menu.get_absolute_url }}" class="price-discount">{{ specpredlozhenie_menu.name }}</a></li>
+              </ul>
+            </div>
+            <div class="col-xs-2 col-sm-1 hidden-md hidden-lg"><a href="#mmenu" class="main-menu-toggle"><i class="fa fa-bars"></i></a></div>
+            <div class="col-xs-10 col-sm-3 col-md-3">
+              <form role="search" class="navbar-search" action="{% url "search:search_results" %}" method="get">
+                <div class="input-group stylish-input-group">
+                    {{ form.q }}
+                    <input type="search" placeholder="Поиск" class="form-control input-sm search" name="s"><span class="input-group-addon">
+                    <button type="submit"><i aria-hidden="true" class="fa fa-search" onclick="{{ button_search|safe }}"></i></button></span>
+                </div>
+              </form>
+            </div>
+            <div class="hidden-xs col-sm-8 col-md-6">
+              <ul class="nav navbar-nav navbar-right">
+                  {% for item in top_menu %}
+                      <li><a href="{{ item.get_absolute_url }}">{{ item.name }}</a>
+                  {% endfor %}
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <!-- end Topbar-->
+    <!-- Header-->
+    <div class="head">
+      <div class="container">
+        <div class="row ib-row">
+          <div class="col-xs-12 col-sm-4 col-md-3 ib-col">
+              <div class="head-item"><a href="/" class="logo"><img src="{% static 'img/pfkvet-logo.png' %}" width="160" height="75"  alt="Логотип"></a></div>
+          </div>
+          <div class="hidden-xs hidden-sm col-md-3 ib-col">
+            <div class="head-item">
+              <ul>
+                <li>
+                  <div>Ваш филиал: <a href="#modal-region" data-toggle="modal" class="select-region">{{ current_filial.name }}</a></div>
+                </li>
+                <li><a href="tel:{{ current_filial.phone_href }}" class="phone phone_xclid" onclick="{{ phone_besplatno|safe }}">{{ current_filial.phone }}</a></li>
+                <li>
+                  <div class="callback"><i aria-hidden="true" class="fa fa-phone"></i><a href="#modal-callback" data-toggle="modal">Обратный звонок</a></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-4 hidden-md hidden-lg ib-col">
+            <div class="head-item">
+              <ul>
+                <li><i aria-hidden="true" class="fa fa-map-marker"></i>Бесплатный звонок по России
+                  <!--div Бесплатный звонок по России-->
+                </li>
+                <li><a href="tel:{{ current_filial.phone_dop_href }}" class="phone mgo-8800" onclick="{{ phone_filial|safe }}">{{ current_filial.phone_dop }}</a>
+                  <div class="btn-group">
+                    <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><span class="caret"></span>
+                      <!--i.fa.fa-chevron-down-->
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-contacts">
+                      <!--li.divider(role='separator')-->
+                      <li>
+                        <div class="head-item">
+                          <ul>
+                            <li>
+                              <div>Ваш филиал: <a href="#modal-region" data-toggle="modal" class="select-region">{{ current_filial.name }}</a></div>
+                            </li>
+                            <li><a href="tel:{{ current_filial.phone_href }}" class="phone phone_xclid" onclick="{{ phone_besplatno|safe }}">{{ current_filial.phone }}</a></li>
+                          </ul>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li>
+                  <div class="callback"><i aria-hidden="true" class="fa fa-phone"></i><a href="#modal-callback" data-toggle="modal">Обратный звонок</a></div>
+                </li>
+                <li><i aria-hidden="true" class="fa fa-envelope-o"></i><a href="mailto:{{ current_filial.email }}" class="email_xclid" target="_blank" onclick="{{ button_email|safe }}" oncopy="{{ copy_email|safe }}">{{ current_filial.email }}</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="hidden-xs hidden-sm col-md-3 ib-col">
+
+            <div class="head-item">
+              <ul>
+                <li><i aria-hidden="true" class="fa fa-map-marker"></i>Бесплатный звонок по России</li>
+                <li><a href="tel:{{ current_filial.phone_dop_href }}" class="phone mgo-8800" onclick="{{ phone_filial|safe }}">{{ current_filial.phone_dop }}</a></li>
+                <li><i aria-hidden="true" class="fa fa-envelope-o"></i><a href="mailto:{{ current_filial.email }}" class="email_xclid" target="_blank" onclick="{{ button_email|safe }}" oncopy="{{ copy_email|safe }}">{{ current_filial.email }}</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="hidden-xs col-sm-4 col-md-3 ib-col">
+            <div class="head-item">
+              <div> <a href="/cart/" class="btn btn-pkf order_cart" onclick="{{ button_oformit_zayavky|safe }}">Оформить заявку <span class="badge"><span class="cart_item_count"> </span> шт</span></a></div> 
+              {% if pricelist_main %}
+                <div><i aria-hidden="true" class="fa fa-file-text-o"></i><a target="_blank" href="{{ MEDIA_URL }}{{ pricelist_main.file }}" onclick="{{ button_price|safe }}" download>Скачать прайс-лист</a></div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end Header-->
+
+
+    {% cache 600 navigation_menu %}
+    <!-- Menu-->
+      <div class="section-main-menu hidden-xs hidden-sm">
+        <div class="container">
+          <nav class="navbar">
+            <ul class="hidden-xs nav navbar-nav navbar-mmenu">
+                 <li class="dropdown">
+                    <a>Каталог</a>
+                    <ul class="drop-menu">
+                        {% for sub_item in main_menus %}
+                              <li><a href="{{ sub_item.get_absolute_url }}">{{ sub_item.name_little }}</a></li>
+                        {% endfor %}
+                    </ul>
+                 </li>
+                 {% for item in main_menus %}
+                        {% if forloop.counter < 5 %}
+                            {% with item_get_child_menu=item.get_child_menu_dops %}
+                                <li class="dropdown">
+                                    {% if item.typeMenu.name == "Информация" %}
+                                        <a>{{ item.name }}</a>
+                                    {% else %}
+                                        <a href="{{ item.get_absolute_url }}">{{ item.name_little }}</a>
+                                    {% endif %}
+
+                                <ul class="drop-menu">
+                                    {% for sub_item  in item_get_child_menu %}
+                                                <li><a href="{{ sub_item.get_absolute_url }}">{{ sub_item.name_little }}</a></li>
+                                    {% endfor %}
+                                    {% for sub_item  in item.get_list_product|dictsort:"name" %}
+                                                <li><a href="{{ sub_item.get_absolute_url }}">{{ sub_item.name }}</a></li>
+                                    {% endfor %}
+                                        </ul>
+                                </li>
+                            {% endwith %}
+                        {% endif %}
+                     
+                {% endfor %}
+                  <li class="dropdown">
+                    <a href="/uslugi/">Услуги</a>
+                    {% comment %} <ul class="drop-menu">
+                        {% for sub_item in main_menus %}
+                              <li><a href="{{ sub_item.get_absolute_url }}">{{ sub_item.name_little }}</a></li>
+                        {% endfor %}
+                    </ul> {% endcomment %}
+                 </li>
+            </ul>
+
+
+            <div id="mmenu">
+              <ul>
+
+                  {% for item in main_menus %}
+                <li>
+                    {% if item.typeMenu.name == "Информация" %}
+                        <a>{{ item.name }}</a>
+                    {% else %}
+                        <a href="{{ item.get_absolute_url }}">{{ item.name }}</a>
+                    {% endif %}
+
+                    <ul>
+
+                        {% for sub_item  in item.get_child_menu|dictsort:"name" %}
+                                    <li><a href="{{ sub_item.get_absolute_url }}">{{ sub_item.name }}</a></li>
+                        {% endfor %}
+                        {% for sub_item  in item.get_list_product|dictsort:"name" %}
+                                    <li><a href="{{ sub_item.get_absolute_url }}">{{ sub_item.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+
+            {% endfor %}
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </div>
+    {% endcache %}
+    
+<div id="modal-callback" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog modal-dialog_callback">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+            <div class="clearfix"></div>
+            <div class="modal-title text-center">Заказ обратного звонка</div>
+            <div class="modal-description text-center">Мы перезвоним вам в течение 15 минут</div>
+          </div>
+          <div class="modal-body">
+
+            <!-- LE FORMULAIRE CORRIGÉ EST ICI -->
+            <form method="POST" id="order_phone" class="ajax-form" action="{% url 'menu:send_form_order' %}">
+                {% csrf_token %}
+                
+                <!-- Champs cachés pour l'anti-spam (si vous les utilisez toujours) -->
+                <input name="robot2" type="hidden" value="True">
+                <input name="robot" type="hidden" value="">
+                <input type="hidden" name="email" value="callback@pfkvet.ru">
+
+                <!-- Champ caché crucial pour identifier le formulaire dans la vue -->
+                <input name="text" type="hidden" value="Заказ обратного звонка">
+                
+              <div class="form-group has-feedback">
+                <input type="text" name="name" placeholder="Ваше имя..." class="form-control">
+                <span class="glyphicon form-control-feedback"></span>
+                <p class="c-red" id="error_callback_name"></p> {# Pour les messages d'erreur #}
+              </div>
+              <div class="form-group has-feedback">
+                <input type="text" name="phone" placeholder="Ваш телефон..." id="phone_val" class="form-control">
+                <span class="glyphicon form-control-feedback"></span>
+                <p class="c-red" id="error_callback_phone"></p> {# Pour les messages d'erreur #}
+              </div>
+              <div class="form-group has-feedback">
+                <textarea class="form-control" rows="5" placeholder="Укажите, что вас интересует" name="text_zayavka"></textarea>
+              </div>
+              <div class="personal-data">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" value="True" name="consent">Я принимаю условия <a target="_blank" href="/informatsija__politika_obrabotki_dannyh/">политики конфиденциальности</a>
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" value="True" name="consent_2" required>Я выражаю <a target="_blank" href="/soglasie-na-obrabotku-personalnyh-dannyh/">согласие на обработку персональных данных</a>
+                  </label>
+                  <p class="c-red" id="error_callback_consent_2"></p> {# Pour les messages d'erreur #}
+                </div>
+              </div>
+              <!-- Un vrai bouton de soumission -->
+              <button type="submit" class="btn btn-block btn-pkf">Перезвоните мне</button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+    <!--Модальное окно "Выбор города"-->
+    <div id="modal-region" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog modal-dialog_region">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+            <div class="clearfix"></div>
+            <div class="modal-title text-center">Выберите свой город</div>
+          </div>
+          <div class="modal-body clearfix">
+            <ul>
+                {% for item in filials %}
+                  {% if item != current_filial %}
+                    <li><a href="{{ request.scheme }}://{{ item.subdomain_name }}{{ current_url }}">{{ item.name }}</a></li>
+                  {% endif %}
+                {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+<!--end navigation-->

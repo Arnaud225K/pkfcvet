@@ -1,0 +1,30 @@
+<div align="right">Показано записей: {{ items_count_show }} {% if items_count_show != items_count_all %}(всего: {{ items_count_all }}){% endif %}</div>
+<table id="items-table" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Наименование</th>
+            <th>Дата</th>
+            <th>Пользователь</th>
+            <th>E-mail</th>
+            <th>Тип операции</th>
+            <th>Готовность</th>
+            <th>Информация</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items_list %}
+        <tr>
+            <td><a href='/media/{{ item.file }}'>{{ item.name }}</a></td>
+            <td>{{ item.date }}</td>
+            <td>{{ item.user }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ item.action }}</td>
+            <td>{{ item.result }}</td>
+            <td>{% if item.state_id > 2 %}<a href='{{ item.get_absolute_url }}'>Подробнее</a>
+                {% elif item.state_id == 2 and item.action == "Проверка дубликатов" %}Дубликатов нет
+                {% elif item.state_id == 2 and item.action == "Импорт марок" %}<a href='{{ item.get_absolute_url }}'>Результаты</a>{% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,39 @@
+{% extends "catalog.html" %}
+{% block content %}
+   <!---------------------  Catalog ---------------------->
+	<div class="div_search_panel">
+		<div class="divcontent_katalog"><h1 class="zagolovok">{{ current_menu.name_title }}</h1> </div>
+    </div>
+<!---- Блок каталога ------------------------------------------------>
+<div class="divcontent">
+    	<div class="div_all_katalog">
+    	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>
+  </td>
+  </tr>
+
+  <tr>
+    <td>
+
+    {% include "info/catalog_list.html" %}
+
+
+
+    </td>
+  </tr>
+</table>
+    </div>
+    </div>
+
+
+
+    <div style="clear: both;"></div>
+
+  <div class="div_search_panel">
+    <div class="divcontent_katalog"><div class="text_block">{{ current_menu.description|safe }}</div> </div>
+    </div>
+
+
+
+{% endblock %}

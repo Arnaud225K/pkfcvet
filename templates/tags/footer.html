@@ -1,0 +1,115 @@
+{% load static %}
+
+<footer class="_footer" itemscope itemtype="https://schema.org/Organization">
+  <div class="container"> 
+    <div class="row _footer__top _footer__line"> 
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="_footer-logo"><img itemprop="logo" src="{% static 'img/pfkvet-logo-white.png' %}" alt="ПФК Цвет" width="180" height="80" loading="lazy"></div>        
+      </div>
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <div class="_footer-subscription">
+          <div class="_footer-subscription__title">Подпишись на рассылку новинок и акций</div>
+          <form method="POST" id="order_mail" action="javascript:void(null);" onsubmit="order_mail()" class="_footer-subscription__form _footer-form">
+            <div class="_footer-form__inner"> 
+              <input type="hidden" name="phone" value="8900 000 00 00">
+              <input type="hidden" name="consent" value="1">
+              <input type="hidden" name="consent_2" value="1">
+              <input type="hidden" name="text" value="Заказ рассылки">
+              <input name="robot" type="hidden" class="myinput" value="">
+              <input type="text" placeholder="Ваш e-mail" name="email" class="_footer-form__input">
+              <button type="submit" class="_footer-form__btn">ПОДПИСАТЬСЯ</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="row _footer__center _footer__line">
+      <div class="col-md-4 col-sm-4 col-xs-12">
+        <ul class="_footer-menu">
+          {% for item in footer_right_menu %}
+              {% if item.typeMenu.name != 'Каталог' and item.name != 'Информация' and item.name != 'О компании' %}
+              <li class="_footer-menu__item"><a class="_footer-menu__link" href="{{ item.get_absolute_url }}">{{ item.name }}</a></li>
+              {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col-md-4 col-sm-4 col-xs-12"> 
+        <div class="_footer-contacts">
+          <div class="_footer-contacts__item"> 
+            <div class="_footer-contacts__item-txt">{{ current_filial.name }}</div><a itemprop="telephone" href="tel:{{ current_filial.phone_href }}" class="_footer-contacts__item-link phone_xclid" onclick="{{ phone_besplatno_footer|safe }}">{{ current_filial.phone }}</a>
+          </div>
+          <div class="_footer-contacts__item"> 
+            <div class="_footer-contacts__item-txt">Бесплатный звонок по России</div><a itemprop="telephone" href="tel:{{ current_filial.phone_dop_href }}" class="_footer-contacts__item-link" onclick="{{ phone_filial_footer|safe }}">{{ current_filial.phone_dop }}</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-4 col-xs-12"> 
+        <div class="_footer-contacts">
+          <div class="_footer-contacts__item"> 
+            <div class="_footer-contacts__item-txt" itemprop="address">{{ current_filial.address }}</div><a itemprop="email" href="mailto:{{ current_filial.email }}" class="_footer-contacts__item-link email_xclid" onclick="{{ button_email_footer|safe }}">{{ current_filial.email }}</a>
+          </div>
+          <div class="_footer-contacts__item _footer-contacts__item--mobile"> 
+            <div class="_footer-contacts__item-txt">Мы в социальных сетях</div>
+            <ul class="_footer-social">
+              <li class="_footer-social__item">
+                <a href="https://vk.com/pkfcvet" target="_blank" class="_footer-social__link"> 
+                  <svg class="icon">
+                    <use xlink:href="{% static 'img/sprites.svg' %}#vk"></use>
+                  </svg>
+                </a>
+              </li>
+              <li class="_footer-social__item">
+                <a href="https://www.instagram.com/ooopkfcvet/" target="_blank" class="_footer-social__link"> 
+                  <svg class="icon">
+                    <use xlink:href="{% static 'img/sprites.svg' %}#inst"></use>
+                  </svg>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row _footer__center _footer__line">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <ul class="_footer-menu-two">
+          {% for item in footer_left_menu %}
+            <li class="_footer-menu__item"><a class="_footer-menu__link" href="{{ item.get_absolute_url }}">{{ item.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="row _footer__bottom">
+      <div class="col-md-4 col-sm-4 col-xs-12 _footer__copyright">
+        <div class="_footer-txt">© 2016-{{ current_year }} / <span itemprop="name">ПФ КВЕТ</span></div>
+      </div>
+      <div class="col-md-4 col-sm-4 col-xs-12 _footer__politics"> 
+        <a href="/informatsija__politika_obrabotki_dannyh/" class="_footer-txt _footer-txt--link">Политика конфеденциальности</a><br/>
+        <a href="/soglasie-na-obrabotku-personalnyh-dannyh/" class="_footer-txt _footer-txt--link">Согласие на обработку персональных данных</a>
+      </div>
+      <div class="col-md-4 col-sm-4 col-xs-12 _footer__offer"> 
+        <div class="_footer-txt">Не является публичной офертой</div>
+      </div>
+    </div>
+  </div>
+  <script type="application/ld+json"> 
+    { 
+      "@context": "https://schema.org", 
+      "@type": "Organization", 
+      "address": { 
+      "@type": "PostalAddress", 
+      "addressLocality": "{{ current_filial.name }}", 
+        "streetAddress": "{{ current_filial.address }}" 
+    }, 
+    "email": "{{ current_filial.email }}", 
+    "name": "ПФ КВЕТ", 
+    "telephone": "{{ current_filial.phone_dop }}" 
+  } 
+  </script>
+</footer>
+<!-- end Footer-->
+<!-- Back to top-->
+<a id="back-to-top" href="#" role="button" data-placement="left" class="btn btn-lg">
+  <div class="back-to-top__inner"><i class="fa fa-chevron-up"></i></div>
+</a>
+<!-- end Back to top-->

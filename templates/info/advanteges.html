@@ -1,0 +1,46 @@
+{% extends "catalog.html" %}
+{% block content %}
+    <!-- Breadcrumb-->
+    {% include "sys/breadcrumb.html" %}
+    <!-- end Breadcrumb-->
+   <!-- advantages page-->
+    <div class="advantages-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="heading-undelined">{{ current_menu.name }}</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="category-description">
+              <p class="text-content">
+                {{ current_menu.description|safe }}
+              </p>
+            </div>
+            <div class="category-description-mobile"></div>
+          </div>
+        </div>
+        <div class="feature-list-1">
+          <div class="row ib-row">
+
+              {% for item in advanteges_list %}
+                <div class="col-xs-12 col-md-4 col-sm-6 ib-col">
+                  <div class="media">
+                    <div class="media-left">
+                      <!--i.fa.fa-check-square-o(aria-hidden='true')--><img src="{{ MEDIA_URL }}{{ item.image }}" alt="{{ item.name }}">
+                    </div>
+                    <div class="media-body">
+                      {{ item.text|safe }}
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end advantages page-->
+    {% include "sys/callback.html" %}
+    {% include "sys/subsection_navigate.html" %}
+{% endblock %}

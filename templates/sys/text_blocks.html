@@ -1,0 +1,25 @@
+<!-- text_blocks.html -->
+    {% for item in text_blocks_menu %}
+        {% if not startPage %}
+            <h2>{{ item.name }}</h2>
+{#        {% else %}#}
+{#            <div style="padding-top: 53px;"></div>#}
+        {% endif %}
+        {% if item.image %}
+            <img style="width: 250px" src="/media/{{ item.image }}" alt="{{ item.name }}">
+        {% endif %}
+        {% if item.text %}
+            <div style="font-size: 22px;line-height: 1.6;color: #4a4a4a;">{{ item.text|safe }}</div>
+        {% endif %}
+        {% if item.isHiddenVideo !=  1 %}
+                {% if item.video %}
+                    <div class="video">
+                        <iframe width="560" height="315"
+                                src="https://www.youtube.com/embed/{{ item.video }}?rel=0" frameborder="0"
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                {% endif %}
+        {% endif %}
+    {% endfor %}
+<!-- end text_blocks.html -->

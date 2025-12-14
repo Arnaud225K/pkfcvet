@@ -1,0 +1,135 @@
+{% extends "catalog.html" %}
+{% block content %}
+    {% include "sys/breadcrumb.html" %}
+
+    <!-- GOST-product content-->
+    <div class="gost-product-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="heading-undelined">Продукция {{ oneGost.number }}</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="category-description">
+              <p class="text-content">
+                  Мы предлагаем широкий ассортимент продукции {{ oneGost.number }}. Наша компания поставляет только высококачественный металлопрокат с доставкой по РФ и СНГ. Все вопросы вы можете задать нашим менеджерам по телефону {{ current_filial.phone }} или отправить заявку на электронную почту {{ current_filial.email }}.
+              </p>
+            </div>
+            <div class="category-description-mobile"></div>
+          </div>
+        </div>
+      {% if MetallCatalogGost %}
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-striped gost-products-table">
+              <thead>
+                <tr>
+                  <th>Вид металла</th>
+                  <th>Размер, A</th>
+                  <th>Размер, B</th>
+                  <th>Размер, C</th>
+                  <th>ГОСТ, ОСТ, ТУ</th>
+                  <th>Марка</th>
+                  <th>Цена</th>
+                  <th>Заказать</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              {% for item in MetallCatalogGost %}
+                <tr>
+                  <td><a href="{{ item.get_absolute_url }}">{{ item.name }}</a></td>
+                  <td><span>Размер, A:</span>{{ item.get_size_a }}</td>
+                  <td><span>Размер, B:</span>{{ item.get_size_b }}</td>
+                  <td><span>Размер, C:</span>{{ item.get_size_c }}</td>
+                  <td><span>ГОСТ, ОСТ, ТУ:</span>{{ item.gost.number }}</td>
+                  <td><span>Марка:</span>{{ item.marka.name }}</td>
+                  <td>
+                     {% if item.price == 0 %}
+                            <a class="link" href="#modal-price-request" data-toggle="modal" onclick="
+                                    document.getElementById('get_price_slug').value = '{{ item.slug }}';
+                                    document.getElementById('get_price_name').textContent ='{{ item.name_main }}';
+                                    ">Узнать цену</a>
+                    {% else %}
+                        <a>{{ item.price|floatformat:"-2"  }}</a>
+                    {% endif %}
+                  </td>
+                  <td>
+                        <a class="btn btn-pkf" href="#modal-buy" data-toggle="modal" onclick="
+                            document.getElementById('add_product_slug').value = '{{ item.slug }}';
+                            document.getElementById('add_product_name').textContent ='{{ item.name_main }}';
+                            add_to_cart();
+                                ">Добавить в заявку</a>
+                  </td>
+                </tr>
+
+              {% endfor %}
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+ {% if marka_filter_list.paginator.page_range %}
+            <div class="row">
+              <div class="col-md-12">
+                <div class="bs-example">
+                  <ul class="pagination">
+                      {% if not marka_filter_list.has_previous %}
+                        <li class="disabled"><a>«</a></li>
+                      {% else %}
+                        <li><a href="/{{ current_menu.slug }}{% if current_marka %}/{{ current_marka.name_lat }}{% endif %}{% if current_gost != None %}/{{ current_gost.number_lat }}{% endif %}{% if s1 != "" %}/1s/{{ s1 }}{% endif %}{% if s2 != "" %}/2s/{{ s2 }}{% endif %}{% if s3 != "" %}/3s/{{ s3 }}{% endif %}{% if s4 != "" %}/4s/{{ s4 }}{% endif %}{% if s5 != "" %}/5s/{{ s5 }}{% endif %}{% if s6 != "" %}/6s/{{ s6 }}{% endif %}{% if s7 != "" %}/7s/{{ s7 }}{% endif %}/page/{{ marka_filter_list.previous_page_number }}/">«</a></li>
+                      {% endif %}
+                      {% for num in marka_filter_list.paginator.page_range %}
+                          {% if num > paginatorMin and num < paginatorMax or forloop.counter == 1 or forloop.revcounter == 1 %}
+                            {% if forloop.revcounter == 1 and paginatorMax < forloop.counter %}
+                                <li><a>...</a></li>
+                            {% endif %}
+                            {% ifequal num marka_filter_list.number %}
+                                <li class="active"><a>{{ num }}</a></li>
+                            {% else %}
+                                {% if forloop.counter == 1 %}
+                                    <li><a href="/{{ current_menu.slug }}{% if current_marka %}/{{ current_marka.name_lat }}{% endif %}{% if current_gost != None %}/{{ current_gost.number_lat }}{% endif %}{% if s1 != "" %}/1s/{{ s1 }}{% endif %}{% if s2 != "" %}/2s/{{ s2 }}{% endif %}{% if s3 != "" %}/3s/{{ s3 }}{% endif %}{% if s4 != "" %}/4s/{{ s4 }}{% endif %}{% if s5 != "" %}/5s/{{ s5 }}{% endif %}{% if s6 != "" %}/6s/{{ s6 }}{% endif %}{% if s7 != "" %}/7s/{{ s7 }}{% endif %}/">{{ num }}</a></li>
+                                {% else %}
+                                    <li><a href="/{{ current_menu.slug }}{% if current_marka %}/{{ current_marka.name_lat }}{% endif %}{% if current_gost != None %}/{{ current_gost.number_lat }}{% endif %}{% if s1 != "" %}/1s/{{ s1 }}{% endif %}{% if s2 != "" %}/2s/{{ s2 }}{% endif %}{% if s3 != "" %}/3s/{{ s3 }}{% endif %}{% if s4 != "" %}/4s/{{ s4 }}{% endif %}{% if s5 != "" %}/5s/{{ s5 }}{% endif %}{% if s6 != "" %}/6s/{{ s6 }}{% endif %}{% if s7 != "" %}/7s/{{ s7 }}{% endif %}/page/{{ num }}/">{{ num }}</a></li>
+                                {% endif %}
+                            {% endifequal %}
+                            {% if forloop.counter == 1 and paginatorMin > 2 %}
+                                <li><a>...</a></li>
+                            {% endif %}
+                          {% endif %}
+                      {% endfor %}
+                      {% if not marka_filter_list.has_next %}
+                        <li class="disabled"><a>»</a></li>
+                      {% else %}
+                        <li><a href="/{{ current_menu.slug }}{% if current_marka %}/{{ current_marka.name_lat }}{% endif %}{% if current_gost != None %}/{{ current_gost.number_lat }}{% endif %}{% if s1 != "" %}/1s/{{ s1 }}{% endif %}{% if s2 != "" %}/2s/{{ s2 }}{% endif %}{% if s3 != "" %}/3s/{{ s3 }}{% endif %}{% if s4 != "" %}/4s/{{ s4 }}{% endif %}{% if s5 != "" %}/5s/{{ s5 }}{% endif %}{% if s6 != "" %}/6s/{{ s6 }}{% endif %}{% if s7 != "" %}/7s/{{ s7 }}{% endif %}/page/{{ marka_filter_list.next_page_number }}/">»</a></li>
+                      {% endif %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+        {% endif %}
+      {% endif %}
+        <div class="category-description">
+          <div class="row">
+            <div class="col-md-12">
+              <p class="text-content">
+              </p>
+              <p class="text-content">
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end GOST-product content-->
+
+    <!-- section Callback category-->
+    {% include "sys/callback.html" %}
+    <!-- end section Callback category-->
+    <!-- Subsection info pages-->
+    {% include "sys/subsection_navigate.html" %}
+    <!-- end Subsection info pages-->
+
+{% endblock %}

@@ -1,0 +1,54 @@
+<!-- news_one.html -->
+    {% include "sys/breadcrumb.html" %}
+
+    <!-- News page-->
+    <div class="news-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="heading-undelined">{{ news_one.name }}</h1>
+          </div>
+        </div>
+        <div class="news-article">
+          <div class="row">
+            <div class="col-sm-12 col-md-4"><img src="{{ MEDIA_URL }}{{ news_one.image }}" alt="{{ current_menu.name }}" class="img-responsive"></div>
+            <div class="col-sm-12 col-md-8">
+              <div class="date-news"><span>{{ news_one.date|date:'Y-m-d' }}</span></div>
+              <div class="news-description">
+                {{ news_one.text|safe }}
+              </div><a href="/news/">Перейти к списку всех новостей</a>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="h3">Другие новости</div>
+          </div>
+        </div>
+        <div class="feature-list-2">
+          <div class="row">
+
+              {% for itemNews in news_list_last|dictsortreversed:"date" %}
+                    {% if itemNews != news_one %}
+                        <div class="col-sm-6 col-md-6">
+                          <div class="news-item">
+                            <div class="media">
+                              <div class="media-left col-sm-6 col-md-6" ><a href="{{ itemNews.get_absolute_url }}"><img style="width: 98%;height: 98%;" src="{{ MEDIA_URL }}{{ itemNews.image }}" alt="{{ current_menu.name }}" class="media-object"></a></div>
+                              <div class="media-body">
+                                <h4 class="media-heading">{{ itemNews.name }}</h4>
+                                <div class="date-news"><span>{{ itemNews.date|date:'Y-m-d' }}</span></div>
+                                <p>{{ itemNews.description|safe }}</p><a href="{{ itemNews.get_absolute_url }}">подробнее</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    {% endif%}
+                {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end News page-->
+<!-- end news_one.html-->

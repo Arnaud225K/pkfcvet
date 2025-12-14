@@ -1,0 +1,16 @@
+{% extends "catalog.html" %}
+{% block content %}
+    <!-- Category -->
+    {% if not current_menu.parent %}
+        {% if current_menu.get_list_product_count %}
+            {% include "catalog/category_product.html" %}
+        {% else%}
+            {% include "catalog/category_top_parent.html" %}
+        {% endif %}
+    {% elif not current_menu.get_list_product_count %}
+        {% include "catalog/category_parent.html" %}
+    {% else %}
+        {% include "catalog/category_product.html" %}
+    {% endif %}
+
+{% endblock %}

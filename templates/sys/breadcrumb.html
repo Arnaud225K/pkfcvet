@@ -1,0 +1,47 @@
+    <!-- breadcrumb.html-->
+    <div class="bg-gray m-b-30">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <ol class="breadcrumb">
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/" itemprop="item"><span itemprop="name">Главная</span></a><meta itemprop="position" content="1"></li>
+              {% if current_menu.parent %}
+                  {% if current_menu.parent.parent %}
+                    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ current_menu.parent.parent.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ current_menu.parent.parent.name }}</span></a><meta itemprop="position" content="2"></li>
+                  {% endif %}
+                  {% if current_menu.parent.slug != "predprijatie" %}
+                     <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ current_menu.parent.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ current_menu.parent.name }}</span></a><meta itemprop="position" content="{% if current_menu.parent.parent %}3{% else %}2{% endif %}"></li>
+                  {% else %}
+                     <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="color:#737373"><span itemprop="name">{{ current_menu.parent.name }}</span><meta itemprop="position" content="{% if current_menu.parent.parent %}3{% else %}2{% endif %}"></li>
+                  {% endif %}
+              {% endif %}
+                {% if metall or oneGost %}
+                  <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ current_menu.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ current_menu.name }}</span></a><meta itemprop="position" content="{% if current_menu.parent.parent %}4{% elif current_menu.parent %}3{% else %}2{% endif %}"></li>
+                    {% if oneGost %}
+                        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active"><span itemprop="name">{{ oneGost.number }}</span><meta itemprop="position" content="{% if current_menu.parent.parent %}5{% elif current_menu.parent %}4{% else %}3{% endif %}"></li>
+                    {% elif oneMarka %}
+                        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ metall.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ metall.name }}</span></a><meta itemprop="position" content="{% if current_menu.parent.parent %}5{% elif current_menu.parent %}4{% else %}3{% endif %}"></li>
+                        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ metallGroup.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ metallGroup.name }}</span></a><meta itemprop="position" content="{% if current_menu.parent.parent %}6{% elif current_menu.parent %}5{% else %}4{% endif %}"></li>
+                        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active"><span itemprop="name">{{ oneMarka.name }}</span><meta itemprop="position" content="{% if current_menu.parent.parent %}7{% elif current_menu.parent %}6{% else %}5{% endif %}"></li>
+                    {% elif metallGroup %}
+                        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ metall.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ metall.name }}</span></a><meta itemprop="position" content="{% if current_menu.parent.parent %}5{% elif current_menu.parent %}4{% else %}3{% endif %}"></li>
+                        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active"><span itemprop="name">{{ metallGroup.name }}</span><meta itemprop="position" content="{% if current_menu.parent.parent %}6{% elif current_menu.parent %}5{% else %}4{% endif %}"></li>
+                    {% else %}
+                        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active"><span itemprop="name">{{ metall.name }}</span><meta itemprop="position" content="{% if current_menu.parent.parent %}5{% elif current_menu.parent %}4{% else %}3{% endif %}"></li>
+                    {% endif %}
+                {% elif news_one %}
+                  <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ current_menu.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ current_menu.name }}</span></a><meta itemprop="position" content="{% if current_menu.parent.parent %}4{% elif current_menu.parent %}3{% else %}2{% endif %}"></li>
+                  <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active"><span itemprop="name">{{ news_one.name }}</span><meta itemprop="position" content="{% if current_menu.parent.parent %}5{% elif current_menu.parent %}4{% else %}3{% endif %}"></li>
+                {% elif art_one %}
+                  <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ current_menu.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ current_menu.name }}</span></a><meta itemprop="position" content="{% if current_menu.parent.parent %}4{% elif current_menu.parent %}3{% else %}2{% endif %}"></li>
+                  <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active"><span itemprop="name">{{ art_one.name }}<meta itemprop="position" content="{% if current_menu.parent.parent %}5{% elif current_menu.parent %}4{% else %}3{% endif %}"></li>
+                {% else %}
+                    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active"><span itemprop="name">{{ current_menu.name }}</span><meta itemprop="position" content="{% if current_menu.parent.parent %}4{% elif current_menu.parent %}3{% else %}2{% endif %}"></li>
+                {% endif %}
+
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end breadcrumb.html-->

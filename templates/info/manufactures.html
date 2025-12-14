@@ -1,0 +1,41 @@
+{% extends "catalog.html" %}
+{% block content %}
+    <!-- Breadcrumb-->
+    {% include "sys/breadcrumb.html" %}
+    <!-- end Breadcrumb-->
+    <!-- Manufacturers-->
+    <div class="manufacturers-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="heading-undelined">{{ current_menu.name }}</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="category-description">
+              <p class="text-content">
+                  {{ current_menu.description|safe }}
+              </p>
+            </div>
+            <div class="category-description-mobile"></div>
+          </div>
+        </div>
+        <div class="manufacturers">
+          <div class="manufacturers-item">
+            <div class="row">
+                {% for item in manufactures_list %}
+                  <div class="col-xs-12 col-sm-6 col-md-4 ib-col"><a href="{{ MEDIA_URL }}{{ item.image }}" data-lightbox="rewards-img" data-title="1"><img src="{{ MEDIA_URL }}{{ item.image }}" alt="{{ item.name }}" class="img-responsive"></a>
+                    <p class="manufacturers-item-title">{{ item.name }}</p>
+                    <p class="manufacturers-item-description">{{ item.text|safe }}</p>
+                  </div>
+                {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end Manufacturers-->
+    {% include "sys/callback.html" %}
+    {% include "sys/subsection_navigate.html" %}
+{% endblock %}

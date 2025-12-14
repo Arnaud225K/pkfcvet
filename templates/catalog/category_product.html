@@ -1,0 +1,610 @@
+{% load catalog_tags filter_urls %}
+<!-- category_product.html -->
+    <!-- Breadcrumb-->
+    <div class="bg-gray m-b-30">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <ol class="breadcrumb">
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/" itemprop="item"><span itemprop="name">Главная</span></a><meta itemprop="position" content="1"></li>
+              {% if current_menu.parent %}
+                  {% if current_menu.parent.parent %}
+                    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ current_menu.parent.parent.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ current_menu.parent.parent.name }}</span></a><meta itemprop="position" content="2"></li>
+                  {% endif %}
+                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ current_menu.parent.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ current_menu.parent.name }}</span></a><meta itemprop="position" content="{% if current_menu.parent.parent %}3{% else %}2{% endif %}"></li>
+              {% endif %}
+              {% if current_marka or current_gost %}
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ current_menu.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ current_menu.name }}</span></a><meta itemprop="position" content="{% if current_menu.parent.parent %}4{% elif current_menu.parent %}3{% else %}2{% endif %}"></li>
+              {% if current_marka and current_gost %}
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ current_menu.get_absolute_url }}/{{ current_marka.name_lat }}/" itemprop="item"><span itemprop="name">{{ current_marka.name }}</span></a><meta itemprop="position" content="{% if current_menu.parent.parent %}4{% elif current_menu.parent %}3{% else %}2{% endif %}"></li>
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active"><span itemprop="name">{{ current_gost.name }}</span><meta itemprop="position" content="{% if current_menu.parent.parent %}5{% elif current_menu.parent %}4{% else %}3{% endif %}"></li>
+              {% endif %}
+              {% if not current_gost and current_marka %}
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active"><span itemprop="name">{{ current_marka.name }}</span><meta itemprop="position" content="{% if current_menu.parent.parent %}5{% elif current_menu.parent %}4{% else %}3{% endif %}"></li>
+              {% endif %}
+              {% if current_gost and not current_marka %}
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active"><span itemprop="name">{{ current_gost.name }}</span><meta itemprop="position" content="{% if current_menu.parent.parent %}5{% elif current_menu.parent %}4{% else %}3{% endif %}"></li>
+              {% endif %}
+              {% else %}
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="active"><span itemprop="name">{{ current_menu.name }}</span><meta itemprop="position" content="{% if current_menu.parent.parent %}4{% elif current_menu.parent %}3{% else %}2{% endif %}"></li>
+              {% endif %}
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end Breadcrumb-->
+    <div class="podpodcategory-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="h1-block">
+              <h1>{{ dynamic_h1 }}</h1>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="category-description">
+              <p class="text-content">
+                В ПФ "КВЕТ" можно купить {{ current_menu.name_p }}
+                {% if current_marka or current_gost or s1 or s2 or s3 or s4 or s5 or s6 or s7 %}
+                {% if current_marka %}{{ current_marka }}{% endif %}
+                    {%  if current_gost %}{{ current_gost }}{% endif %}
+                    {{ label_s1|lower }} {{ s1 }}
+                    {% if s2 != "" and s1 != "" %}x{% endif %}
+                    {{ label_s2|lower }} {{ s2 }}
+                    {% if s2 != "" and s3 != "" %}x{% endif %}
+                    {{ label_s3|lower }} {{ s3 }}
+                    {% if s3 != "" and s4 != ""%}x{% endif %}
+                    {{ label_s4|lower }} {{ s4 }} {{ label_s5|lower }} {{ s5 }} {{ label_s6|lower }} {{ s6 }} {{ label_s7|lower }} {{ s7 }}
+                {% endif %}
+                {{ current_filial.name_p }} по минимальным ценам и со своевременной доставкой товаров. Мы предлагаем полный набор услуг по поставке и обработке металлопродукции. Гибкая система скидок. Вы приобретаете качественный товар по приемлемой цене и получаете его в оговоренные сроки. <br/>
+                Чтобы уточнить информацию по поводу заказа продукции, позвоните по телефону отдела продаж {{ current_filial.name_p }} - <b><a href="tel:{{ current_filial.phone_href }}" class="phone phone_xclid">{{ current_filial.phone }}</a></b>.<br/>
+                Также вы можете написать нам на почту - <b><i aria-hidden="true" class="fa fa-envelope-o"></i><a href="mailto:{{ current_filial.email }}" class="email_xclid" target="_blank" onclick="{{ button_email|safe }}">{{ current_filial.email }}</a></b>.
+				Реализуем {{ current_menu.name_p }}
+                {{ current_filial.name_p }} из наличия со склада и под заказ. <br/>Наш адрес: {{ current_filial.address }}.
+              </p>
+            </div>
+            <div class="category-description-mobile"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter bg-gray">
+        <div class="container">
+         <form id="filter_form" name="filter_form" class="main2" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="menu_slug" value="{{ current_menu.slug }}">
+            <input type="hidden" name="filter_marka" value="{{ marka_lat|default:'' }}">
+            <input type="hidden" name="filter_gost" value="{{ gost_lat|default:'' }}">
+            <input type="hidden" name="filter_s1" value="{{ s1_lat|default:'' }}">
+            <input type="hidden" name="filter_s2" value="{{ s2_lat|default:'' }}">
+            <input type="hidden" name="filter_s3" value="{{ s3_lat|default:'' }}">
+            <input type="hidden" name="filter_s4" value="{{ s4_lat|default:'' }}">
+            <input type="hidden" name="filter_s5" value="{{ s5_lat|default:'' }}">
+            <input type="hidden" name="filter_s6" value="{{ s6_lat|default:'' }}">
+            <input type="hidden" name="filter_s7" value="{{ s7_lat|default:'' }}">
+         </form>
+
+          <div class="row">
+            <div class="col-sm-12 col-md-12">
+              <div class="title">Фильтр продукции</div>
+            </div>
+          </div>
+          <div class="row">
+          {% if current_menu.labelSizeA %}
+            <div class="col-sm-4 col-md-3">
+              <div id="filter-length" data-clear="true" data-live="true" class="selectpicker">
+                <a href="javascript:void(0)" onclick="filter_form.filter_s1.value='';get_filter_url();" class="clear" {% if s1_lat %}style="display: block;"{% endif %}><span class="fa fa-times"></span><span class="sr-only">Отменить выбор</span></a>
+                <button data-id="prov" type="button" class="btn btn-block btn-default dropdown-toggle">
+                  <span class="placeholder">{% if s1 %}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ s1 }}{% else %}{{ current_menu.labelSizeA }}{% endif %}</span><span class="caret"></span>
+                </button>
+                <div class="dropdown-menu">
+                  <div data-clear="true" data-autocomplete="true" data-keys="true" class="live-filtering">
+                    <label for="input-bts-ex-1" class="sr-only">Поиск</label>
+                    <div class="search-box">
+                      <div class="input-group"><span id="search-icon1" class="input-group-addon"><span class="fa fa-search"></span><a href="#" class="fa fa-times hide filter-clear"><span class="sr-only">Очистить фильтр</span></a></span>
+                        <input id="input-bts-ex-1" type="text" placeholder="Поиск" aria-describedby="search-icon1" tabindex="1" class="form-control live-search">
+                      </div>
+                    </div>
+                    <div class="list-to-filter">
+                      <ul class="list-unstyled">
+                        {% for item in s1_filter %}
+                          <li onclick="filter_form.filter_s1.value='{{ item.value_lat }}';get_filter_url();" style="text-decoration: none;color:#373737;" onmouseover="style='background: #e6e6e6;'" onmouseout="style='background: transparent;'" data-filter="{{ item.value }}" data-value="{{ item.value_lat }}" class="filter-item items">{{ item.value }}</li>
+                        {% endfor %}
+                      </ul>
+                      <div class="no-search-results">
+                        <div role="alert" class="alert alert-warning"><i class="fa fa-warning margin-right-sm"></i>Значение <strong>'<span></span>'</strong> не найдено</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if current_menu.labelSizeB %}
+            <div class="col-sm-4 col-md-3">
+              <div id="filter-width" data-clear="true" data-live="true" class="selectpicker">
+                <a href="javascript:void(0)" onclick="filter_form.filter_s2.value='';get_filter_url();" class="clear" {% if s2_lat %}style="display: block;"{% endif %}><span class="fa fa-times"></span><span class="sr-only">Отменить выбор</span></a>
+                <button data-id="prov" type="button" class="btn btn-block btn-default dropdown-toggle">
+                  <span class="placeholder">{% if s2 %}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ s2 }}{% else %}{{ current_menu.labelSizeB }}{% endif %}</span><span class="caret"></span>
+                </button>
+                <div class="dropdown-menu">
+                  <div data-clear="true" data-autocomplete="true" data-keys="true" class="live-filtering">
+                    <label for="input-bts-ex-2" class="sr-only">Поиск</label>
+                    <div class="search-box">
+                      <div class="input-group"><span id="search-icon2" class="input-group-addon"><span class="fa fa-search"></span><a href="#" class="fa fa-times hide filter-clear"><span class="sr-only">Очистить фильтр</span></a></span>
+                        <input id="input-bts-ex-2" type="text" placeholder="Поиск" aria-describedby="search-icon2" tabindex="1" class="form-control live-search">
+                      </div>
+                    </div>
+                    <div class="list-to-filter">
+                      <ul class="list-unstyled">
+                        {% for item in s2_filter %}
+                          <li onclick="filter_form.filter_s2.value='{{ item.value_lat }}';get_filter_url();" style="text-decoration: none;color:#373737;" onmouseover="style='background: #e6e6e6;'" onmouseout="style='background: transparent;'" data-filter="{{ item.value }}" data-value="{{ item.value_lat }}" class="filter-item items">{{ item.value }}</li>
+                        {% endfor %}
+                      </ul>
+                      <div class="no-search-results">
+                        <div role="alert" class="alert alert-warning"><i class="fa fa-warning margin-right-sm"></i>Значение <strong>'<span></span>'</strong> не найдено</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if current_menu.labelSizeC %}
+            <div class="col-sm-4 col-md-3">
+              <div id="filter-thickness" data-clear="true" data-live="true" class="selectpicker">
+                <a href="javascript:void(0)" onclick="filter_form.filter_s3.value='';get_filter_url();" class="clear" {% if s3_lat %}style="display: block;"{% endif %}><span class="fa fa-times"></span><span class="sr-only">Отменить выбор</span></a>
+                <button data-id="prov" type="button" class="btn btn-block btn-default dropdown-toggle">
+                  <span class="placeholder">{% if s3 %}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ s3 }}{% else %}{{ current_menu.labelSizeC }}{% endif %}</span><span class="caret"></span>
+                </button>
+                <div class="dropdown-menu">
+                  <div data-clear="true" data-autocomplete="true" data-keys="true" class="live-filtering">
+                    <label for="input-bts-ex-3" class="sr-only">Поиск</label>
+                    <div class="search-box">
+                      <div class="input-group"><span id="search-icon3" class="input-group-addon"><span class="fa fa-search"></span><a href="#" class="fa fa-times hide filter-clear"><span class="sr-only">Очистить фильтр</span></a></span>
+                        <input id="input-bts-ex-3" type="text" placeholder="Поиск" aria-describedby="search-icon3" tabindex="1" class="form-control live-search">
+                      </div>
+                    </div>
+                    <div class="list-to-filter">
+                      <ul class="list-unstyled">
+                        {% for item in s3_filter %}
+                          <li onclick="filter_form.filter_s3.value='{{ item.value_lat }}';get_filter_url();" style="text-decoration: none;color:#373737;" onmouseover="style='background: #e6e6e6;'" onmouseout="style='background: transparent;'" data-filter="{{ item.value }}" data-value="{{ item.value_lat }}" class="filter-item items">{{ item.value }}</li>
+                        {% endfor %}
+                      </ul>
+                      <div class="no-search-results">
+                        <div role="alert" class="alert alert-warning"><i class="fa fa-warning margin-right-sm"></i>Значение <strong>'<span></span>'</strong> не найдено</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if current_menu.labelSizeD %}
+            <div class="col-sm-4 col-md-3">
+              <div id="filter-length" data-clear="true" data-live="true" class="selectpicker">
+                <a href="javascript:void(0)" onclick="filter_form.filter_s4.value='';get_filter_url();" class="clear" {% if s4_lat %}style="display: block;"{% endif %}><span class="fa fa-times"></span><span class="sr-only">Отменить выбор</span></a>
+                <button data-id="prov" type="button" class="btn btn-block btn-default dropdown-toggle">
+                  <span class="placeholder">{% if s4 %}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ s4 }}{% else %}{{ current_menu.labelSizeD }}{% endif %}</span><span class="caret"></span>
+                </button>
+                <div class="dropdown-menu">
+                  <div data-clear="true" data-autocomplete="true" data-keys="true" class="live-filtering">
+                    <label for="input-bts-ex-4" class="sr-only">Поиск</label>
+                    <div class="search-box">
+                      <div class="input-group"><span id="search-icon4" class="input-group-addon"><span class="fa fa-search"></span><a href="#" class="fa fa-times hide filter-clear"><span class="sr-only">Очистить фильтр</span></a></span>
+                        <input id="input-bts-ex-4" type="text" placeholder="Поиск" aria-describedby="search-icon4" tabindex="1" class="form-control live-search">
+                      </div>
+                    </div>
+                    <div class="list-to-filter">
+                      <ul class="list-unstyled">
+                        {% for item in s4_filter %}
+                          <li onclick="filter_form.filter_s4.value='{{ item.value_lat }}';get_filter_url();" style="text-decoration: none;color:#373737;" onmouseover="style='background: #e6e6e6;'" onmouseout="style='background: transparent;'" data-filter="{{ item.value }}" data-value="{{ item.value_lat }}" class="filter-item items">{{ item.value }}</li>
+                        {% endfor %}
+                      </ul>
+                      <div class="no-search-results">
+                        <div role="alert" class="alert alert-warning"><i class="fa fa-warning margin-right-sm"></i>Значение <strong>'<span></span>'</strong> не найдено</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if current_menu.labelSizeE %}
+            <div class="col-sm-4 col-md-3">
+              <div id="filter-width" data-clear="true" data-live="true" class="selectpicker">
+                <a href="javascript:void(0)" onclick="filter_form.filter_s5.value='';get_filter_url();" class="clear" {% if s5_lat %}style="display: block;"{% endif %}><span class="fa fa-times"></span><span class="sr-only">Отменить выбор</span></a>
+                <button data-id="prov" type="button" class="btn btn-block btn-default dropdown-toggle">
+                  <span class="placeholder">{% if s5 %}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ s5 }}{% else %}{{ current_menu.labelSizeE }}{% endif %}</span><span class="caret"></span>
+                </button>
+                <div class="dropdown-menu">
+                  <div data-clear="true" data-autocomplete="true" data-keys="true" class="live-filtering">
+                    <label for="input-bts-ex-5" class="sr-only">Поиск</label>
+                    <div class="search-box">
+                      <div class="input-group"><span id="search-icon5" class="input-group-addon"><span class="fa fa-search"></span><a href="#" class="fa fa-times hide filter-clear"><span class="sr-only">Очистить фильтр</span></a></span>
+                        <input id="input-bts-ex-5" type="text" placeholder="Поиск" aria-describedby="search-icon5" tabindex="1" class="form-control live-search">
+                      </div>
+                    </div>
+                    <div class="list-to-filter">
+                      <ul class="list-unstyled">
+                        {% for item in s5_filter %}
+                          <li onclick="filter_form.filter_s5.value='{{ item.value_lat }}';get_filter_url();" style="text-decoration: none;color:#373737;" onmouseover="style='background: #e6e6e6;'" onmouseout="style='background: transparent;'" data-filter="{{ item.value }}" data-value="{{ item.value_lat }}" class="filter-item items">{{ item.value }}</li>
+                        {% endfor %}
+                      </ul>
+                      <div class="no-search-results">
+                        <div role="alert" class="alert alert-warning"><i class="fa fa-warning margin-right-sm"></i>Значение <strong>'<span></span>'</strong> не найдено</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if current_menu.labelSizeF %}
+            <div class="col-sm-4 col-md-3">
+              <div id="filter-thickness" data-clear="true" data-live="true" class="selectpicker">
+                <a href="javascript:void(0)" onclick="filter_form.filter_s6.value='';get_filter_url();" class="clear" {% if s6_lat %}style="display: block;"{% endif %}><span class="fa fa-times"></span><span class="sr-only">Отменить выбор</span></a>
+                <button data-id="prov" type="button" class="btn btn-block btn-default dropdown-toggle">
+                  <span class="placeholder">{% if s6 %}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ s6 }}{% else %}{{ current_menu.labelSizeF }}{% endif %}</span><span class="caret"></span>
+                </button>
+                <div class="dropdown-menu">
+                  <div data-clear="true" data-autocomplete="true" data-keys="true" class="live-filtering">
+                    <label for="input-bts-ex-6" class="sr-only">Поиск</label>
+                    <div class="search-box">
+                      <div class="input-group"><span id="search-icon6" class="input-group-addon"><span class="fa fa-search"></span><a href="#" class="fa fa-times hide filter-clear"><span class="sr-only">Очистить фильтр</span></a></span>
+                        <input id="input-bts-ex-6" type="text" placeholder="Поиск" aria-describedby="search-icon6" tabindex="1" class="form-control live-search">
+                      </div>
+                    </div>
+                    <div class="list-to-filter">
+                      <ul class="list-unstyled">
+                        {% for item in s6_filter %}
+                          <li onclick="filter_form.filter_s6.value='{{ item.value_lat }}';get_filter_url();" style="text-decoration: none;color:#373737;" onmouseover="style='background: #e6e6e6;'" onmouseout="style='background: transparent;'" data-filter="{{ item.value }}" data-value="{{ item.value_lat }}" class="filter-item items">{{ item.value }}</li>
+                        {% endfor %}
+                      </ul>
+                      <div class="no-search-results">
+                        <div role="alert" class="alert alert-warning"><i class="fa fa-warning margin-right-sm"></i>Значение <strong>'<span></span>'</strong> не найдено</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if current_menu.labelSizeL %}
+            <div class="col-sm-4 col-md-3">
+              <div id="filter-length" data-clear="true" data-live="true" class="selectpicker">
+                <a href="javascript:void(0)" onclick="filter_form.filter_s7.value='';get_filter_url();" class="clear" {% if s7_lat %}style="display: block;"{% endif %}><span class="fa fa-times"></span><span class="sr-only">Отменить выбор</span></a>
+                <button data-id="prov" type="button" class="btn btn-block btn-default dropdown-toggle">
+                  <span class="placeholder">{% if s7 %}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ s7 }}{% else %}{{ current_menu.labelSizeL }}{% endif %}</span><span class="caret"></span>
+                </button>
+                <div class="dropdown-menu">
+                  <div data-clear="true" data-autocomplete="true" data-keys="true" class="live-filtering">
+                    <label for="input-bts-ex-7" class="sr-only">Поиск</label>
+                    <div class="search-box">
+                      <div class="input-group"><span id="search-icon7" class="input-group-addon"><span class="fa fa-search"></span><a href="#" class="fa fa-times hide filter-clear"><span class="sr-only">Очистить фильтр</span></a></span>
+                        <input id="input-bts-ex-7" type="text" placeholder="Поиск" aria-describedby="search-icon7" tabindex="1" class="form-control live-search">
+                      </div>
+                    </div>
+                    <div class="list-to-filter">
+                      <ul class="list-unstyled">
+                        {% for item in s7_filter %}
+                          <li onclick="filter_form.filter_s7.value='{{ item.value_lat }}';get_filter_url();" style="text-decoration: none;color:#373737;" onmouseover="style='background: #e6e6e6;'" onmouseout="style='background: transparent;'" data-filter="{{ item.value }}" data-value="{{ item.value_lat }}" class="filter-item items">{{ item.value }}</li>
+                        {% endfor %}
+                      </ul>
+                      <div class="no-search-results">
+                        <div role="alert" class="alert alert-warning"><i class="fa fa-warning margin-right-sm"></i>Значение <strong>'<span></span>'</strong> не найдено</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if not current_menu.isHideGOST and gost_filter %}
+            <div class="col-sm-4 col-md-3">
+              <div id="filter-gost" data-clear="true" data-live="true" class="selectpicker">
+                <a href="#" onclick="filter_form.filter_gost.value='';get_filter_url();" class="clear" {% if gost_lat %}style="display: block;"{% endif %}><span class="fa fa-times"></span><span class="sr-only">Отменить выбор</span></a>
+                <button data-id="prov" type="button" class="btn btn-block btn-default dropdown-toggle">
+                  <span class="placeholder">{% if current_gost %}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ current_gost.number }}{% else %}ГОСТ{% endif %}</span><span class="caret"></span>
+                </button>
+                <div class="dropdown-menu">
+                  <div data-clear="true" data-autocomplete="true" data-keys="true" class="live-filtering">
+                    <label for="input-bts-ex-8" class="sr-only">Поиск</label>
+                    <div class="search-box">
+                      <div class="input-group"><span id="search-icon8" class="input-group-addon"><span class="fa fa-search"></span><a href="#" class="fa fa-times hide filter-clear"><span class="sr-only">Очистить фильтр</span></a></span>
+                        <input id="input-bts-ex-8" type="text" placeholder="Поиск" aria-describedby="search-icon8" tabindex="1" class="form-control live-search">
+                      </div>
+                    </div>
+                    <div class="list-to-filter">
+                      <ul class="list-unstyled">
+                        {% for item in gost_filter %}
+                          <li onclick="filter_form.filter_gost.value='{{ item.gost__number_lat }}';get_filter_url();" style="text-decoration: none;color:#373737;" onmouseover="style='background: #e6e6e6;'" onmouseout="style='background: transparent;'" data-filter="{{ item.gost__number }}" data-value="{{ item.gost__number_lat }}" class="filter-item items">{{ item.gost__number }}</li>
+                        {% endfor %}
+                      </ul>
+                      <div class="no-search-results">
+                        <div role="alert" class="alert alert-warning"><i class="fa fa-warning margin-right-sm"></i>Значение <strong>'<span></span>'</strong> не найдено</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if not current_menu.isHideMarka and marka_filter %}
+            <div class="col-sm-4 col-md-3">
+              <div id="filter-stamp" data-clear="true" data-live="true" class="selectpicker">
+                <a href="#" onclick="filter_form.filter_marka.value='';get_filter_url();" class="clear" {% if marka_lat %}style="display: block;"{% endif %}><span class="fa fa-times"></span><span class="sr-only">Отменить выбор</span></a>
+                <button data-id="prov" type="button" class="btn btn-block btn-default dropdown-toggle">
+                  <span class="placeholder">{% if current_marka %}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ current_marka.name }}{% else %}Марка{% endif %}</span><span class="caret"></span>
+                </button>
+                <div class="dropdown-menu">
+                  <div data-clear="true" data-autocomplete="true" data-keys="true" class="live-filtering">
+                    <label for="input-bts-ex-9" class="sr-only">Поиск</label>
+                    <div class="search-box">
+                      <div class="input-group"><span id="search-icon9" class="input-group-addon"><span class="fa fa-search"></span><a href="#" class="fa fa-times hide filter-clear"><span class="sr-only">Очистить фильтр</span></a></span>
+                        <input id="input-bts-ex-9" type="text" placeholder="Поиск" aria-describedby="search-icon9" tabindex="1" class="form-control live-search">
+                      </div>
+                    </div>
+                    <div class="list-to-filter">
+                      <ul class="list-unstyled">
+                        {% for item in marka_filter %}
+                          <li onclick="filter_form.filter_marka.value='{{ item.marka__name_lat }}';get_filter_url();" style="text-decoration: none;color:#373737;" onmouseover="style='background: #e6e6e6;'" onmouseout="style='background: transparent;'" data-filter="{{ item.marka__name }}" data-value="{{ item.marka__name_lat }}" class="filter-item items">{{ item.marka__name }}</li>
+                        {% endfor %}
+                      </ul>
+                      <div class="no-search-results">
+                        <div role="alert" class="alert alert-warning"><i class="fa fa-warning margin-right-sm"></i>Значение <strong>'<span></span>'</strong> не найдено</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          
+          </div>
+            <div class="row">
+              <div class="col-md-12"><a href="{{ current_menu.get_absolute_url }}">Сбросить фильтр</a></div>
+            </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-striped products-table">
+              <thead>
+                <tr>
+                    <th>Вид металла</th>
+                    {% if current_menu.labelSizeA %}<th>{{ current_menu.labelSizeA }}</th>{% endif %}
+                    {% if current_menu.labelSizeB %}<th>{{ current_menu.labelSizeB }}</th>{% endif %}
+                    {% if current_menu.labelSizeC %}<th>{{ current_menu.labelSizeC }}</th>{% endif %}
+                    {% if current_menu.labelSizeD %}<th>{{ current_menu.labelSizeD }}</th>{% endif %}
+                    {% if current_menu.labelSizeE %}<th>{{ current_menu.labelSizeE }}</th>{% endif %}
+                    {% if current_menu.labelSizeF %}<th>{{ current_menu.labelSizeF }}</th>{% endif %}
+                    {% if current_menu.labelSizeL %}<th>{{ current_menu.labelSizeL }}</th>{% endif %}
+                    {% if not current_menu.isHideGOST %}{% if gost_filter or gost_filter_value %}<th>ГОСТ, ОСТ, ТУ</th>{% endif %}{% endif %}
+                    {% if not current_menu.isHideMarka %}{% if marka_filter or marka_filter_value %}<th>Марка</th>{% endif %}{% endif %}
+                    <th>{% if current_menu.price_title %}{{ current_menu.price_title }}{% else %}Цена{% endif %}</th>
+                    <th>Заказать</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for item in marka_filter_list %}
+                <tr>
+                  <td><a href="{{ item.get_absolute_url }}">{{ item.name_main }}</a></td>
+                    {% if current_menu.labelSizeA %}<td><span>{% if current_menu.labelSizeA %}{{ current_menu.labelSizeA }}:{% endif %}</span> {% if item.size_a and item.size_a != '0'%}{{ item.size_a }}{% endif %}</td>{% endif %}
+                    {% if current_menu.labelSizeB %}<td><span>{% if current_menu.labelSizeB %}{{ current_menu.labelSizeB }}:{% endif %}</span> {% if item.size_b and item.size_b != '0'%}{{ item.size_b }}{% endif %}</td>{% endif %}
+                    {% if current_menu.labelSizeC %}<td><span>{% if current_menu.labelSizeC %}{{ current_menu.labelSizeC }}:{% endif %}</span> {% if item.size_c and item.size_c != '0'%}{{ item.size_c }}{% endif %}</td>{% endif %}
+                    {% if current_menu.labelSizeD %}<td><span>{% if current_menu.labelSizeD %}{{ current_menu.labelSizeD }}:{% endif %}</span> {% if item.size_d and item.size_d != '0'%}{{ item.size_d }}{% endif %}</td>{% endif %}
+                    {% if current_menu.labelSizeE %}<td><span>{% if current_menu.labelSizeE %}{{ current_menu.labelSizeE }}:{% endif %}</span> {% if item.size_e and item.size_e != '0'%}{{ item.size_e }}{% endif %}</td>{% endif %}
+                    {% if current_menu.labelSizeF %}<td><span>{% if current_menu.labelSizeF %}{{ current_menu.labelSizeF }}:{% endif %}</span> {% if item.size_f and item.size_f != '0'%}{{ item.size_f }}{% endif %}</td>{% endif %}
+                    {% if current_menu.labelSizeL %}<td><span>{% if current_menu.labelSizeL %}{{ current_menu.labelSizeL }}:{% endif %}</span> {% if item.size_l and item.size_l != '0'%}{{ item.size_l }}{% endif %}</td>{% endif %}
+
+                    {% if not current_menu.isHideGOST %}{% if gost_filter or gost_filter_value %}<td>{% if item.gost.number %}<span>ГОСТ, ОСТ, ТУ:</span> {{ item.gost.number }}{% endif %}</td>{% endif %}{% endif %}
+                    {% if not current_menu.isHideMarka %}{% if marka_filter or marka_filter_value %}<td>{% if item.marka.name %}<span>Марка:</span> {{ item.marka.name }}{% endif %}</td>{% endif %}{% endif %}
+                  <td>
+                     {% if item.price == 0 %}
+                            <a class="link" href="#modal-price-request" data-toggle="modal" onclick="
+                                    document.getElementById('get_price_slug').value = '{{ item.slug }}';
+                                    document.getElementById('get_price_name').textContent ='{{ item.name_main }}';
+                                    ">Узнать цену</a>
+                    {% else %}
+                        <a>{{ item.price|floatformat:"-2"  }}</a>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <a class="btn btn-pkf" href="#modal-buy" data-toggle="modal" onclick="handleAddToCartClick('{{ item.slug|escapejs }}', '{{ item.name_main|escapejs }}')">
+                      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="446.853px" height="446.853px" viewBox="0 0 446.853 446.853" style="enable-background:new 0 0 446.853 446.853;" xml:space="preserve" class="icon">
+                        <g>
+                          <path d="M444.274,93.36c-2.558-3.666-6.674-5.932-11.145-6.123L155.942,75.289c-7.953-0.348-14.599,5.792-14.939,13.708                                        c-0.338,7.913,5.792,14.599,13.707,14.939l258.421,11.14L362.32,273.61H136.205L95.354,51.179                                        c-0.898-4.875-4.245-8.942-8.861-10.753L19.586,14.141c-7.374-2.887-15.695,0.735-18.591,8.1c-2.891,7.369,0.73,15.695,8.1,18.591                                        l59.491,23.371l41.572,226.335c1.253,6.804,7.183,11.746,14.104,11.746h6.896l-15.747,43.74c-1.318,3.664-0.775,7.733,1.468,10.916                                        c2.24,3.184,5.883,5.078,9.772,5.078h11.045c-6.844,7.617-11.045,17.646-11.045,28.675c0,23.718,19.299,43.012,43.012,43.012                                        s43.012-19.294,43.012-43.012c0-11.028-4.201-21.058-11.044-28.675h93.777c-6.847,7.617-11.047,17.646-11.047,28.675                                        c0,23.718,19.294,43.012,43.012,43.012c23.719,0,43.012-19.294,43.012-43.012c0-11.028-4.2-21.058-11.042-28.675h13.432                                        c6.6,0,11.948-5.349,11.948-11.947c0-6.6-5.349-11.948-11.948-11.948H143.651l12.902-35.843h216.221                                        c6.235,0,11.752-4.028,13.651-9.96l59.739-186.387C447.536,101.679,446.832,97.028,444.274,93.36z M169.664,409.814                                        c-10.543,0-19.117-8.573-19.117-19.116s8.574-19.117,19.117-19.117s19.116,8.574,19.116,19.117S180.207,409.814,169.664,409.814z                                        M327.373,409.814c-10.543,0-19.116-8.573-19.116-19.116s8.573-19.117,19.116-19.117s19.116,8.574,19.116,19.117                                        S337.916,409.814,327.373,409.814z"></path>
+                        </g>
+                      </svg>
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      {% if products.paginator.num_pages > 1 %}
+            <ul class="pagination">
+                
+                {% if products.has_previous %}
+                    <li><a href="{{ current_menu.get_absolute_url|slice:":-1" }}{{ base_filter_url_part }}/page/{{ products.previous_page_number }}/">«</a></li>
+                {% else %}
+                    <li class="disabled"><a>«</a></li>
+                {% endif %}
+
+                {% for num in products.paginator.page_range %}
+                    {% if num >= paginatorMin and num <= paginatorMax %}
+                        {% if num == products.number %}
+                            <li class="active"><a>{{ num }}</a></li>
+                        {% else %}
+                            <li><a href="{{ current_menu.get_absolute_url|slice:":-1" }}{{ base_filter_url_part }}/page/{{ num }}/">{{ num }}</a></li>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if products.has_next %}
+                    <li><a href="{{ current_menu.get_absolute_url|slice:":-1" }}{{ base_filter_url_part }}/page/{{ products.next_page_number }}/">»</a></li>
+                {% else %}
+                    <li class="disabled"><a>»</a></li>
+                {% endif %}
+
+            </ul>
+        {% endif %}
+
+        <div class="row">
+<div class="col-md-12">
+              {% if not current_menu.isHideGOST %}
+                <div class="gost">
+                  <div class="h3 gost-title">ГОСТы</div>
+                  <ul class="list-inline readmore-gost">
+                      {% for item in current_menu.get_list_gost_all %}
+                          {% if item.gost__number %}
+                            <li>
+                              {% if item.gost__number == current_gost.number %}
+                                {{ item.gost__number }}
+                              {% else %}
+                                <a href="{% build_filter_url 'gost' item.gost__number_lat %}">{{ item.gost__number }}</a>
+                              {% endif %}
+                            </li>
+                          {% endif %}
+                      {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+              {% if not current_menu.isHideMarka %}
+                <div class="stamp">
+                  <div class="h3 stamp-title">Марки</div>
+                  <ul class="list-inline">
+                      {% for item in current_menu.get_list_marka_all %}
+                          {% if item.marka__name and not item.marka__hiddenSite %}
+                            <li>
+                              {% if item.marka__name == current_marka.name %}
+                                {{ item.marka__name }}
+                              {% else %}
+                                <a href="{% build_filter_url 'marka' item.marka__name_lat %}">{{ item.marka__name }}</a>
+                              {% endif %}
+                            </li>
+                          {% endif %}
+                      {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+          </div>
+        </div>
+
+        {% if marka_filter_list.number == 1 and not current_marka and not current_gost and not s1 and not s2 and not s3 and not s4 and not s5 and not s6 and not s7 %}
+            <div class="row">
+              <div class="col-md-12">
+                <div class="category-description">
+                    {{ current_menu.description|safe }}
+                </div>
+              </div>
+            </div>
+        {% endif %}
+      </div> 
+          
+    </div>
+    <!-- Other category background gray-->
+
+    <div class="section other-category bg-gray">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+          {% if dop_text_block_url %}              
+              <h2>{{ dop_text_block_url.name }}</h2>
+              
+              {% if dop_text_block_url.image %}
+                  <div class="thumbnail-img">
+                      <img style="height: 150px;width: 100%;object-fit: cover;" src="{{ MEDIA_URL }}{{ dop_text_block_url.image.url }}" alt="{{ dop_text_block_url.name }}" class="img-responsive">
+                  </div>
+              {% endif %}
+              
+              {{ dop_text_block_url.text|safe }}
+              
+          {% endif %}
+            {% if current_marka or current_gost or s1 or s2 or s3 or s4 %}
+                <h3>{{ current_menu.name }}
+                  {% if current_marka or current_gost or s1 or s2 or s3 or s4 or s5 or s6 or s7 %}
+                  {% if current_marka %}{{ current_marka }}{% endif %}
+                      {%  if current_gost %}{{ current_gost }}{% endif %}
+                      {{ label_s1|lower }} {{ s1 }}
+                      {% if s2 != "" and s1 != "" %}x{% endif %}
+                      {{ label_s2|lower }} {{ s2 }}
+                      {% if s2 != "" and s3 != "" %}x{% endif %}
+                      {{ label_s3|lower }} {{ s3 }}
+                      {% if s3 != "" and s4 != ""%}x{% endif %}
+                      {{ label_s4|lower }} {{ s4 }} {{ label_s5|lower }} {{ s5 }} {{ label_s6|lower }} {{ s6 }} {{ label_s7|lower }} {{ s7 }}
+                  {% endif %}
+                    купить по выгодным ценам
+                </h3>
+                Мы осуществляем оперативную доставку по городу {{ current_filial.name }}, а также в другие регионы России и страны СНГ.
+                Компания «ПФ КФЕТ» имеет долгосрочный опыт продуктивного и успешного сотрудничества в сфере поставок металлоконструкций.
+                Мы можем гарантировать выполнение всех требований для взаимовыгодных, надежных и долгосрочных отношений.
+                В интернет-магазине нашей компании Вы найдете все необходимые товары.<br/>
+                Для заказа позвоните по телефону <a href="tel:{{ current_filial.phone_href }}" class="phone phone_xclid">{{ current_filial.phone }}</a> или оставьте заявку на почту {{ current_filial.email }}.<br/>
+                Менеджеры представительства в городе {{ current_filial.name }} ответят на вопросы и помогут рассчитать стоимость товара.<br/><br/>
+            {% endif %}
+            {% if metall_categories_similar %}
+            <div class="h3">Другие товары {% if current_menu.catalog_childs_dop.all %}в категории {{ current_menu.parent.name }}{% endif %}</div>
+            {% endif %}
+          </div>
+        </div>
+        
+        {% if metall_categories_similar %}
+        <div class="row">
+            {% for item in metall_categories_similar %}
+              <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 ib-col"><a href="{{ item.get_absolute_url }}">
+                  <div class="thumbnail">
+                    <div class="thumbnail-img"><img style="height: 150px;width: 100%;object-fit: cover;" src="{{ MEDIA_URL }}{{ item.image }}" loading="lazy" alt="{{ item.name }}" class="img-responsive"></div>
+                    <div class="thumbnail-description">
+                      <h4>{{ item.name }}</h4>
+                    </div>
+                  </div></a>
+              </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+     {% for item_category in current_menu.catalog_childs_dop.all %}
+      {% if item_category %}
+          <div class="section other-category bg-gray">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="h3">Другие товары в категории {{ item_category.name }}</div>
+                </div>
+              </div>
+              <div class="row">
+                  {% for item in item_category.get_metall_categories_similar %}
+                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 ib-col"><a href="{{ item.get_absolute_url }}">
+                            <div class="thumbnail">
+                              <div class="thumbnail-img"><img style="height: 150px;width: 100%;object-fit: cover;" src="{{ MEDIA_URL }}{{ item.image }}" loading="lazy" alt="{{ item.name }}" class="img-responsive"></div>
+                              <div class="thumbnail-description">
+                                <h4>{{ item.name }}</h4>
+                              </div>
+                            </div></a>
+                        </div>
+                  {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+    {% endfor %}
+    <!-- end Other category background gray-->

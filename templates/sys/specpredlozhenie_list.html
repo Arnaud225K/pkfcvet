@@ -1,0 +1,50 @@
+ <div class="div_search_panel">
+        <div class="divcontent_katalog">
+            <h1 class="zagolovok">Спецпредложения</h1>
+        </div>
+    </div>
+
+    <div class="div_search_panel">
+        <div class="divcontent_katalog">
+            <div class="text_block">
+                Мы готовы поставить любые виды трубного проката в кротчайшие сроки и по доступным ценам. Так же
+                предлагаем уникальные услуги по описание услуги 1 или дополнительно описание услуги 2. Наша команда
+                готова к заказам
+            </div>
+        </div>
+    </div>
+
+    <div style="clear: both;"></div>
+
+    {% for item in specpredl_list %}
+
+
+        <a href="{{ item.get_absolute_url }}"><div class="div_search_panel">
+            <div class="div_sp">
+
+                <div class="div_sp_3">
+                    <img class="img_kat_tovar" src="{{ MEDIA_URL }}{{ item.image }}"
+                         alt="{{ item.name }}"/>
+                </div>
+
+                <div class="div_sp_4">
+
+                    <div class="tb_text_sp4">{{ item.name }}</div>
+                    <div class="tb_text_sp2">{{ item.price }}</div>
+
+                    <div class="tb_text_sp">
+                        {{ item.text|safe }}
+                    </div>
+
+                    <div class="tb_text_sp">
+                        {% if item.full_text %}
+                            {{ item.full_text|safe }}
+                        {% endif %}
+                    </div>
+
+                </div>
+
+            </div>
+        </div></a>
+        <div style="clear: both;"></div>
+    {% endfor %}

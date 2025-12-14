@@ -1,0 +1,56 @@
+{% extends "catalog.html" %}
+{% block content %}
+    {% include "sys/breadcrumb.html" %}
+    <!-- Rewards-->
+    <div class="rewards-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="heading-undelined">{{ current_menu.name }}</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="category-description">
+              <p class="text-content">
+                  {{ current_menu.description|safe }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="rewards">
+          <div class="rewards-item">
+            <div class="row">
+                {% for item in awards_list %}
+                  <div class="col-xs-12 col-sm-6 col-md-4 ib-col"><a href="{{ MEDIA_URL }}{{ item.image }}" data-lightbox="rewards-img" data-title="1"><img src="{{ MEDIA_URL }}{{ item.image }}" alt="{{ item.name }}" class="img-responsive"></a>
+                    <p class="manufacturers-item-description">{{ item.text|safe }}</p>
+                  </div>
+                {% endfor %}
+            </div>
+          </div>
+        </div>
+{#        <div class="row">#}
+{#          <div class="col-md-12">#}
+{#            <div class="bs-example">#}
+{#              <ul class="pagination">#}
+{#                <li class="disabled"><a href="#">«</a></li>#}
+{#                <li class="active"><a href="#">1</a></li>#}
+{#                <li><a href="#">2</a></li>#}
+{#                <li><a href="#">3</a></li>#}
+{#                <li><a href="#">4</a></li>#}
+{#                <li><a href="#">5</a></li>#}
+{#                <li><a href="#">»</a></li>#}
+{#              </ul>#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+      </div>
+    </div>
+    <!-- end Rewards-->
+    <!-- section Callback category-->
+    {% include "sys/callback.html" %}
+    <!-- end section Callback category-->
+    <!-- Subsection rewards-->
+    {% include "sys/subsection_navigate.html" %}
+    <!-- end Subsection rewards-->
+{% endblock %}

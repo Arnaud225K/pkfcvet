@@ -1,0 +1,26 @@
+<div align="right">Показано записей: {{ items_count_show }} {% if items_count_show != items_count_all %}(всего: {{ items_count_all }}){% endif %}</div>
+<table id="items-table" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Категория</th>
+            <th>Дата</th>
+            <th>Пользователь</th>
+            <th>E-mail</th>
+            <th>Готовность</th>
+            <th>Ссылка</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items_list %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.date }}</td>
+            <td>{{ item.user }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ item.result }}</td>
+            <td>{% if item.link %}<a href='{{ item.get_full_link }}'>{{ item.link }}</a>{% endif %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>

@@ -1,0 +1,60 @@
+<div class="col-sm-3">
+    <div class="left-sidebar">
+        <h2>{{ current_menu.get_parent_menu.name }}</h2>
+        <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+            <div class="panel panel-default">
+
+                {% for item in current_menu.get_parent_menu.get_child_menu %}
+                    {% with item_get_child_menu=item.get_child_menu %}
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordian" href="#{{ item.slug }}">
+                                    <span class="badge pull-right">
+                                        {% if item_get_child_menu  %}
+                                            <i class="fa fa-plus"></i>
+                                        {% endif %}
+                                    </span>
+                                    <a href="{{ item.get_absolute_url }}">{{ item.name }}</a>
+                                </a>
+                            </h4>
+                        </div>
+                        {% if item_get_child_menu  %}
+                            <div id="{{ item.slug }}" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul>
+                                        {% for sub_item in item_get_child_menu %}
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" data-parent="#{{ sub_item.parent.slug }}" href="#{{ sub_item.slug }}">
+                                                        <span class="badge pull-right">
+                                                            {% if sub_item.get_list_marka  %}
+                                                                <i class="fa fa-plus"></i>
+                                                            {% endif %}
+                                                        </span>
+                                                        <a href="{{ sub_item.get_absolute_url }}">{{ sub_item.name }}</a>
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                             {% if sub_item.get_list_marka  %}
+                                                <div id="{{ sub_item.slug }}" class="panel-collapse collapse">
+                                                    <div class="panel-body">
+                                                        <ul>
+                                                            {% for sub_item_marka in sub_item.get_list_marka %}
+                                                                <li><a href="{{ sub_item.get_absolute_url }}">{{ sub_item_marka.marka__name }} </a></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                {% endfor %}
+            </div>
+        </div><!--/category-productsr-->
+    </div>
+</div>

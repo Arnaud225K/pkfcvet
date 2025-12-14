@@ -1,0 +1,26 @@
+    <!-- Модальное окно "Добавить в заявку" -->
+    <div id="modal-buy" tabindex="-1" role="dialog"  aria-hidden="false" class="modal">
+      <div class="modal-dialog modal-dialog_buy">
+        <div class="modal-content">
+          <div class="modal-header">
+                <button type="submit" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+            <div class="clearfix"></div>
+            <div class="modal-title text-center">Вы добавили в заявку</div>
+            <div class="modal-description text-center" id="add_product_name">{{ product.name_main }}</div>
+          </div>
+          <div class="modal-body clearfix">
+              <a href="/cart/" class="btn btn-pkf" onclick="{{ button_zayavka_kategoriya|safe }}">Оформить заявку</a>
+              <a href="javascript:void(0)" data-dismiss="modal" aria-label="Close" class="btn btn-pkf btn-pkf-inverse"><i aria-hidden="true" class="fa fa-reply" onclick="{{ button_vernutsya|safe }}"></i>Вернуться</a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <form id="add_product_form" method="post">
+        <input type="hidden" name="product_slug" id="add_product_slug" value="{{ product.slug }}"/>
+        <input type="hidden" name="add_product" value="True"/>
+        <input name="quantity" value="1" type="hidden">
+        <input type="hidden" name="checkout_nav" value="True">
+    </form>
+
+

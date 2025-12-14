@@ -1,0 +1,52 @@
+{% extends "catalog.html" %}
+{% block content %}
+<div class="div_search_panel">  
+	<div class="divcontent_katalog">
+    	<h1 class="zagolovok">{{ current_menu.name }}</h1>
+    </div>
+</div>		
+		
+<div class="div_search_panel">  
+	<div class="divcontent_katalog">
+    	<div class="text_block">
+            {{ current_menu.description|safe }}
+        </div>
+    </div>
+</div>		
+		
+<div class="div_clear_height_30px"></div>
+	       
+<!----------------------------------------->            
+
+	<div class="divcontent">
+    	<div class="div_all_katalog">
+    	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  
+  <tr>
+    <td>
+<div class="divcontent_katalog">
+
+
+    {% for sub_item in current_menu.get_child_menu %}
+        <div class="div_all_inner_katalog">
+            <div class="div_all_inner_2">
+                {% if sub_item.image %}
+              <input name="img_katalog2" type="image" class="img_katalog" src="{{ MEDIA_URL }}{{ sub_item.image }}"><br>
+                {% endif %}
+              <span class="label_katalog"><a href="{{ sub_item.get_absolute_url }}">{{ sub_item.name }}</a></span>		</div>
+        </div>
+    {% endfor %}
+
+	</div></td>
+  </tr>
+</table>
+    	</div>  
+    </div>  
+    
+<div class="div_clear_height_30px"></div>
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "catalog.html" %}
+{% block content %}
+    {% include "sys/breadcrumb.html" %}
+
+
+
+    <!-- GOST content-->
+    <div class="gost-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="heading-undelined">{{ current_menu.name }}</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="category-description">
+              <p class="text-content">
+                {{ current_menu.description|safe }}
+              </p>
+            </div>
+            <div class="category-description-mobile"></div>
+          </div>
+        </div>
+		<!-- 
+        <div class="gost-filter">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="gost-filter-title">Воспользуйтесь фильтром</div>
+            </div>
+          </div>
+          <div class="gost-filter-description">
+            <div class="row">
+              <div class="col-xs-12 col-sm-4 col-md-4">
+                  <form id="search" action="{% url "search_results" %}" method="get">
+                    <div class="gost-filter-item">
+                      <label for="name">Поиск по марке:</label>
+                      <input type="search" placeholder="Введите марку" name="s_marka"  class="form-control">
+                    </div>
+                  </form>
+              </div>
+              <div class="col-xs-12 col-sm-4 col-md-4">
+                  <form id="search" action="{% url "search_results" %}" method="get">
+                    <div class="gost-filter-item">
+                      <label for="name">Поиск по ГОСТу:</label>
+                      <input type="search" placeholder="Введите ГОСТ" name="s_gost" class="form-control">
+                    </div>
+                  </form>
+              </div>
+              <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="gost-filter-item">
+                  <label for="name">Аналоги:</label>
+                  <input type="text" placeholder="Аналоги" class="form-control">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <div class="gost-block">
+          <div class="row">
+
+            {% for item in marka_head_list %}
+                <div class="col-xs-12 col-sm-6 col-md-4 ib-col">
+                  <div class="gost-block-item">
+                    <div class="gost-block-item-title"><a href="{{ item.get_absolute_url }}">{{ item.name }}</a></div>
+                    <div class="gost-block-item-description">
+                      <ul class="dash-line-list readmore-ul">
+                          {% for sub_item in item.get_list_metall_group %}
+                                <li><a href="{{ sub_item.get_absolute_url }}">{{ sub_item.name }}</a></li>
+                          {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+            {% endfor %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end GOST content-->
+    <!-- section Callback category-->
+    {% include "sys/callback.html" %}
+    <!-- end section Callback category-->
+    <!-- Subsection info pages-->
+    {% include "sys/subsection_navigate.html" %}
+    <!-- end Subsection info pages-->
+
+{% endblock %}

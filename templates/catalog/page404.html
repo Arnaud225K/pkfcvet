@@ -1,0 +1,29 @@
+{% extends "catalog.html" %}
+{% block content %}
+
+    <section class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="h2 heading-undelined">Ошибка 404</div>
+          </div>
+        </div>
+        <div class="feature-list-1">
+          <div class="row ib-row">
+            <div class="row">
+              <div class="col-md-12">
+                  Данная страница не существует, но Вы можете посетить наш <a href="/">каталог</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+    <script>
+      window.onload = function (){
+      {{ page404error|safe }}
+      }
+  </script>
+
+{% endblock %}

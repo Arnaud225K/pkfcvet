@@ -1,0 +1,61 @@
+<!-- Callback Manager services -->
+    <div class="section section-callback-services bg-gray">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12 col-sm-3 col-md-3 ib-col">
+            <div class="section-callback-item">
+              <p>Нужна консультация специалиста по {% if product.name_info %}{{ product.name_info }}{% elif product and current_menu.name_info %}{{ current_menu.name_info }}{% else %}{{ product.name_main }}{% endif %}?</p>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 ib-col">
+            <div class="section-callback-item">
+              <div class="media">
+                <div class="media-left"><img src="{{ MEDIA_URL }}{{ sotrudnik.image }}" alt="{{ sotrudnik.name }}" class="img-responsive img-circle"></div>
+                <div class="media-body">
+                  <div class="title">{{ sotrudnik.name }}</div>
+                  <div class="description">оставьте ваш номер и я перезвоню в течение 15 минут</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-3 col-md-3 ib-col">
+            <div class="section-callback-item">
+
+              <form method="POST" id="order-phone-callback-manager-form" class="ajax-form" action="{% url 'menu:send_form_order' %}">
+                  {% csrf_token %}
+                  
+                  <input name="robot" type="hidden" class="myinput" value="">
+                  <input name="name" type="hidden" value="Клиент">
+                  <input type="hidden" name="email" value="consultation@pfkvet.ru">
+
+                  <input name="form_type" type="hidden" value="consultation_request">
+                  <input name="text" type="hidden" value="Консультация по: {% if product.name_main %}{{ product.name_main|escapejs }}{% else %}общим вопросам{% endif %}">                  
+                
+                <div class="form-group has-feedback">
+                  <input type="text" name="phone" placeholder="Ваш телефон..." class="form-control">
+                  <p class="c-red error-field" data-field-name="phone"></p>
+                </div>
+                <div class="personal-data">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="consent" value="True">Я принимаю условия <a target="_blank" href="/informatsija__politika_obrabotki_dannyh/">политики конфиденциальности</a>
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="consent_2" value="True" required>Я выражаю <a target="_blank" href="/soglasie-na-obrabotku-personalnyh-dannyh/">согласие на обработку персональных данных</a>
+                    </label>
+                    <p class="c-red error-field" data-field-name="consent_2"></p>
+                  </div>
+                </div>
+
+                <!-- Le bouton de soumission standard -->
+                <button type="submit" class="btn btn-block btn-pkf">Перезвоните мне</button>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end section-callback-services -->

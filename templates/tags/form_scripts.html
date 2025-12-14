@@ -1,0 +1,243 @@
+{% comment %} <script>
+
+    function send_form_order() {
+        // Le nom du formulaire semble être 'checkout_order_new' d'après le code
+        // Assurez-vous que l'ID de votre formulaire de panier est bien 'checkout_order_new'
+        var form = $('#checkout_order_new'); 
+        var formData = new FormData(form.get(0));
+
+        $.ajax({
+            url: form.attr('action'), // Utiliser l'action du formulaire, c'est plus propre
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            data: formData,
+            dataType: 'json',
+            success: function(data) {
+                document.getElementById('btn_order_form').disabled = false;
+                
+                // --- LA CORRECTION EST ICI ---
+                // On vérifie le statut et la présence de l'URL de redirection
+                if (data.status === 'success' && data.redirect_url) {
+                    // Rediriger vers l'URL fournie par le serveur
+                    window.location.href = data.redirect_url;
+                } else {
+                    // Gérer le cas où le succès n'a pas de redirection (ne devrait pas arriver ici)
+                    alert('Заказ успешно отправлен!');
+                }
+            },
+            error:  function(xhr) {
+                document.getElementById('btn_order_form').disabled = false;
+                if (xhr.status === 400 && xhr.responseJSON && xhr.responseJSON.errors) {
+                    // Gérer les erreurs de validation du formulaire
+                    var errors = JSON.parse(xhr.responseJSON.errors);
+                    // Vider les anciens messages d'erreur
+                    $('#error_form_email').text('');
+                    $('#error_form_phone').text('');
+                    $('#error_form_name').text('');
+                    // Afficher les nouveaux messages d'erreur
+                    if (errors.email) $('#error_form_email').text(errors.email[0].message);
+                    if (errors.phone) $('#error_form_phone').text(errors.phone[0].message);
+                    if (errors.name) $('#error_form_name').text(errors.name[0].message);
+                    if (errors.consent_2) $('#error_cart_consent_2').text(errors.consent_2[0].message);
+                } else {
+                    alert('Возникла ошибка при отправке формы.');
+                }
+            }
+        });
+    }
+
+    function send_form_get_price() {
+        formData = new FormData($(checkout_order_new_get_price).get(0));
+        $.ajax({
+            url: '{% url 'menu:send_form_order' %}',
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            data: formData,
+            dataType: 'json',
+            success: function(data) {
+            document.getElementById('btn_order_get_price').disabled = false;
+            if(data['form_type']){
+                {{ button_zaprosit_ceny|safe }}
+                $('#modal-price-request').modal('hide');
+                $('#error_get_price_email').text("");
+                $('#error_get_price_phone').text("");
+                $('#error_get_price_name').text("");
+                $('#error_consent').text("");
+                $('#error_consent_2').text("");
+                location.href = '{% url 'checkout:checkout_receipt' %}';
+            }
+            else{
+                $('#error_get_price_email').text(data['error_email']);
+                $('#error_get_price_phone').text(data['error_phone']);
+                $('#error_get_price_name').text(data['error_name']);
+                $('#error_consent').text(data['error_consent']);
+                $('#error_consent_2').text(data['error_consent_2']);
+            }
+        },
+        error:  function(xhr, str){
+            alert('Возникла ошибка: ' + xhr.responseCode);
+            document.getElementById('btn_order_get_price').disabled = false;
+            }
+        });
+    }
+
+
+
+    function add_to_cart() {
+        // Assurez-vous que l'ID de votre formulaire d'ajout est bien 'add_product_form'
+        var form = $('#add_product_form'); 
+        var formData = new FormData(form.get(0));
+
+        $.ajax({
+            url: form.attr('action') || "{% url 'menu:send_form_order' %}", // Utiliser l'action du formulaire
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            data: formData,
+            dataType: 'json',
+            success: function(data) {
+                if (data.status === 'added' || data.status === 'added_and_redirect') {
+                    // Succès ! Mettre à jour le compteur du panier
+                    get_cart_count();
+                    
+                    // Fermer la modale
+                    // Assurez-vous que l'ID de la modale est correct
+                    $('#modal-buy').modal('hide');
+                    
+                    if (data.status === 'added_and_redirect' && data.redirect_url) {
+                        window.location.href = data.redirect_url;
+                    } else {
+                        // Optionnel : afficher une petite notification de succès
+                        alert('Товар добавлен в корзину!');
+                    }
+                }
+            },
+            error: function(xhr) {
+                // Gérer les erreurs de validation (status 400)
+                if (xhr.status === 400 && xhr.responseJSON && xhr.responseJSON.errors) {
+                    var errors = JSON.parse(xhr.responseJSON.errors);
+                    var errorMessage = "Не удалось добавить товар в корзину:\n";
+                    for (var field in errors) {
+                        // __all__ est une clé spéciale pour les erreurs non liées à un champ
+                        if (field === '__all__') {
+                            errorMessage += "- " + errors[field][0].message + "\n";
+                        } else {
+                            errorMessage += "- " + field + ": " + errors[field][0].message + "\n";
+                        }
+                    }
+                    alert(errorMessage);
+                } else {
+                    // Gérer les erreurs de serveur
+                    alert('Произошла ошибка сервера при добавлении товара.');
+                }
+            }
+        });
+    }
+
+    function delete_product() {
+        formData = new FormData($(form_delete).get(0));
+        $.ajax({
+            url: '{% url 'menu:send_form_order' %}',
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            data: formData,
+            dataType: 'json',
+        success: function(data) {
+            get_cart_count();
+                cart_count -= 1;
+            if(cart_count == 0)
+            {
+                document.getElementById('cart_items_box').style.display = 'None';
+                document.getElementById('cart_empty').style.display = 'block';
+            }
+                document.getElementById('item_id_'+data['Delete']).style.display = 'None';
+                document.getElementById('form_delete').id='';
+            },
+        error:  
+        function(xhr, str){
+            alert('Возникла ошибка: ' + xhr.responseCode);
+            }
+        });
+    }
+
+    function get_filter_url() {
+        formData = new FormData($(filter_form).get(0));
+        $.ajax({
+            url: '{% url 'menu:get_filter_url' %}',
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                data: formData,
+                dataType: 'json',
+            success: function(data) {
+                location.href = data['url'];
+            },
+                error:  function(xhr, str){
+                alert('Возникла ошибка: ' + xhr.responseCode);
+            }
+        });
+    }
+
+    function csrfSafeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    function get_cart_count() {
+        $.ajax({
+                url: "{% url 'menu:get_cart_count' %}",
+                method: "GET",
+                success: function(data) {
+                    var elements = document.getElementsByClassName('cart_item_count');
+                    for(var i = 0; i < elements.length; i++)
+                        elements[i].innerText = data['cart_item_count'];
+                    var elements_phone = document.getElementsByClassName('phone_xclid');
+                    for(var i = 0; i < elements_phone.length; i++)
+                    {
+                        elements_phone[i].href = 'tel:' + data['phone_xclid'];
+                        elements_phone[i].innerText = data['phone_xclid'];
+                    }
+                    var elements_email = document.getElementsByClassName('email_xclid');
+                    for(var i = 0; i < elements_email.length; i++)
+                    {
+                        elements_email[i].href = 'mailto:' + data['email_xclid'];
+                        elements_email[i].innerText = data['email_xclid'];
+                    }
+                    cart_count = Number(data['cart_item_count']);
+            }
+        });
+
+    }
+
+    $(document).ready (
+        function(){
+            get_cart_count();
+        }
+    );
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            var csrftoken = getCookie('csrftoken');
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+</script> {% endcomment %}

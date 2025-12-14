@@ -1,0 +1,229 @@
+{% extends "admin_m/catalog.html" %}
+{% block content %}
+    <script src="{{ static_admin_url }}bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>Импорт</h1>
+            <ol class="breadcrumb">
+                <li><a href="{% url 'admin_m:admin_m_home' %}"><i class="fa fa-edit"></i> Главная</a></li>
+                <li class="active">Импорт</li>
+            </ol>
+        </section>
+
+ <!-- Main content -->
+
+    <section class="content">
+
+        <div class="row">
+                <div class="col-xs-12">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><strong>Импорт позиций:</strong></h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="box-body chart-responsive">
+                    <form role="form" id="form_result" method="post" action="javascript:void(0)" onsubmit="get_result();">
+                    {% csrf_token %}
+                    <input type="hidden" name="type_action" id="type_action" value="">
+                        <div class="col-xs-12">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Выберите файл</label>
+                                        <input type="file" name="file" class="custom-file-input" id="exampleInputFile"  accept="application/vnd.ms-excel" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Электронная почта</label>
+                                    <input type="email" name="email" style="width: 100%;" oninvalid="setCustomValidity('Пожалуйста, введите корректно электронную почту')" onchange="try{setCustomValidity('')}catch(e){}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                              <div class="form-group">
+                                <button type="submit" id="button_import" class="btn btn-primary" style="width: 100%;" 
+                                        onclick="document.getElementById('type_action').value='import';">Импортировать</button>
+                                <input type="checkbox" name="flag_hard_import"> Отключить проверку дубликатов
+                              </div>
+                            </div>
+                            <div class="col-sm-2">
+                              <div class="form-group">
+                                <button type="submit" id="button_control" class="btn btn-primary" style="width: 100%;" onclick="document.getElementById('type_action').value='control';">Проверить дубликаты</button>
+                              </div>
+                            </div>
+                            <div class="col-sm-2">
+                              <div class="form-group">
+                                <button type="submit" id="button_import_marka" class="btn btn-primary" style="width: 100%;" onclick="document.getElementById('type_action').value='import_marka';">Импортировать марки</button>
+                              </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                  <button type="submit" id="button_import_redirect" class="btn btn-primary" style="width: 100%;" onclick="document.getElementById('type_action').value='import_redirect';">Импортировать марки</button>
+                                </div>
+                              </div>
+                        </div>
+
+                        </div>
+                    </form>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+            <div class="box">
+                <!-- /.box-header -->
+                <div class="box-body" id="table_item">
+                {% if items_list %}
+                    <div align="right">Показано записей: {{ items_count_show }} {% if items_count_show != items_count_all %}(всего: {{ items_count_all }}){% endif %}</div>
+                    <table id="items-table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Наименование</th>
+                                <th>Дата</th>
+                                <th>Пользователь</th>
+                                <th>E-mail</th>
+                                <th>Тип операции</th>
+                                <th>Готовность</th>
+                                <th>Информация</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items_list %}
+                            <tr>
+                                <td><a href='/media/{{ item.file }}'>{{ item.name }}</a></td>
+                                <td>{{ item.date }}</td>
+                                <td>{{ item.user }}</td>
+                                <td>{{ item.email }}</td>
+                                <td>{{ item.action }}</td>
+                                <td>{{ item.result }}</td>
+                                <td>{% if item.state_id > 2 %}<a href='{{ item.get_absolute_url }}'>Подробнее</a>
+                                    {% elif item.state_id == 2 and item.action == "Проверка дубликатов" %}Дубликатов нет
+                                    {% elif item.state_id == 2 and item.action == "Импорт марок" %}<a href='{{ item.get_absolute_url }}'>Результаты</a>{% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    Информация отсутствует
+                {% endif %}
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+            </div>
+        </div>
+        <!-- /.row (main row) -->
+            
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+
+    <script>
+        function get_result() {
+            form_data = new FormData($(form_result).get(0));
+            document.getElementById('button_import').disabled=true;
+            document.getElementById('button_control').disabled=true;
+            document.getElementById('button_import_marka').disabled=true;
+            document.getElementById('button_import_redirect').disabled=true;
+            $.ajax({
+              url: '{% url 'admin_m:admin_m_import' %}',
+              type: 'POST',
+              contentType: false, // важно - убираем форматирование данных по умолчанию
+              processData: false, // важно - убираем преобразование строк по умолчанию
+              data: form_data,
+              success: function(data) {
+                  document.getElementById('table_item').innerHTML=data;
+                  document.getElementById('button_import').disabled=false;
+                  document.getElementById('button_control').disabled=false;
+                  document.getElementById('button_import_marka').disabled=false;
+                  document.getElementById('button_import_redirect').disabled=false;
+                  $(function () {
+                        $('#items-table').DataTable({
+                        mark: {
+                            element: 'span',
+                            className: 'highlight'
+                        },
+                        "aaSorting": [],
+                        "pageLength": 50,
+                        "aLengthMenu": [[50, 100, 500], [50, 100, 500]],
+                        language: {
+                            "processing": "Подождите...",
+                            "search": "Поиск:",
+                            "lengthMenu": "Показать _MENU_ записей",
+                            "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                            "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                            "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                            "infoPostFix": "",
+                            "loadingRecords": "Загрузка записей...",
+                            "zeroRecords": "Записи отсутствуют.",
+                            "emptyTable": "В таблице отсутствуют данные",
+                            "paginate": {
+                                "first": "Первая",
+                                "previous": "Предыдущая",
+                                "next": "Следующая",
+                                "last": "Последняя"
+                            },
+                            "aria": {
+                                "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                                "sortDescending": ": активировать для сортировки столбца по убыванию"
+                            }
+                        }
+                        })
+                      });
+
+              },
+              error:  function(xhr, str){
+                  alert('Возникла ошибка: ' + xhr.responseCode);
+              }
+            });
+        }
+        
+
+        $(function () {
+            $('#items-table').DataTable({
+            mark: {
+                element: 'span',
+                className: 'highlight'
+            },
+            "aaSorting": [],
+            "pageLength": 50,
+            "aLengthMenu": [[50, 100, 500], [50, 100, 500]],
+            language: {
+                "processing": "Подождите...",
+                "search": "Поиск:",
+                "lengthMenu": "Показать _MENU_ записей",
+                "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+                "infoEmpty": "Записи с 0 до 0 из 0 записей",
+                "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                "infoPostFix": "",
+                "loadingRecords": "Загрузка записей...",
+                "zeroRecords": "Записи отсутствуют.",
+                "emptyTable": "В таблице отсутствуют данные",
+                "paginate": {
+                    "first": "Первая",
+                    "previous": "Предыдущая",
+                    "next": "Следующая",
+                    "last": "Последняя"
+                },
+                "aria": {
+                    "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                    "sortDescending": ": активировать для сортировки столбца по убыванию"
+                }
+            }
+            })
+          });
+    </script> 
+
+{% endblock %}

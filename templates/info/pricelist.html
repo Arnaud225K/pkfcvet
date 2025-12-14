@@ -1,0 +1,43 @@
+{% extends "catalog.html" %}
+{% block content %}
+    {% include "sys/breadcrumb.html" %}
+    <!-- Pricelist page-->
+    <div class="pricelist-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="heading-undelined">Прайс-листы</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="category-description">
+                <p class="text-content">{{ current_menu.description|safe }}</p>
+            </div>
+            <div class="category-description-mobile"></div>
+          </div>
+        </div>
+        <div class="row">
+          {% for item in pricelist_list %}
+              <div class="col-xs-12 col-sm-6 col-md-6 ib-col">
+                <div class="pricelist-download">
+                  <div class="media">
+                    <div class="media-left"><i aria-hidden="true" class="fa fa-file-text-o"></i></div>
+                    <div class="media-body"><a href="{{ MEDIA_URL }}{{ item.file }}" target="_blank">{{ item.name }}</a>
+                      <p>Прайс-лист обновлен: {{ item.date }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <!-- end pricelist content-->
+    <!-- section Callback category-->
+    {% include "sys/callback.html" %}
+    <!-- end section Callback category-->
+    <!-- Subsection info pages-->
+    {% include "sys/subsection_navigate.html" %}
+    <!-- end Subsection info pages-->
+{% endblock %}

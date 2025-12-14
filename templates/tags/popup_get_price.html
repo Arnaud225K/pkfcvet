@@ -1,0 +1,108 @@
+    {% load checkout_tags %}
+
+    {% comment %} <div id="modal-price-request" tabindex="-1" role="dialog" aria-hidden="true" class="modal">
+      <div class="modal-dialog modal-dialog_buy">
+        <div class="modal-content">
+          <div class="modal-header">
+              <button type="submit" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+            <div class="clearfix"></div>
+            <div class="modal-title text-center">Узнать цену</div>
+            <div class="modal-description text-center" id="get_price_name">{{ product.name_main }}</div>
+          </div>
+          <div class="modal-body">
+            <form method="post" name="checkout_order_new_get_price">
+                <input type="hidden" name="submit_check_get_price" value="checkout_get_price"/>
+                <input name="robot" type="hidden" class="myinput" value=""/>
+                <input name="text" type="hidden" value="[checkout_order_new_get_price]"/>
+
+                <input type="hidden" name="product_slug" id="get_price_slug" value="{{ product.slug }}"/>
+              <div class="form-group has-feedback">
+                <input type="text" name="name" placeholder="Ваше имя..." {% if form.name.value %}value="{{ form.name.value }}"{% endif %} class="form-control"/><span class="glyphicon form-control-feedback"></span>
+                <p class="c-red" id="error_get_price_name"></p>
+              </div>
+              <div class="form-group has-feedback">
+                <input type="text" name="phone" placeholder="Ваш телефон..." {% if form.phone.value %}value="{{ form.phone.value }}"{% endif %} class="form-control"/><span class="glyphicon form-control-feedback"></span>
+                <p class="c-red" id="error_get_price_phone"></p>
+              </div>
+              <div class="form-group has-feedback">
+                <input type="text" name="email" placeholder="Ваш e-mail..." {% if form.email.value %}value="{{ form.email.value }}"{% endif %} class="form-control"/><span class="glyphicon form-control-feedback"></span>
+                <p class="c-red" id="error_get_price_email"></p>
+              </div>
+                <div class="personal-data">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" name="consent" value="True"/>Я принимаю условия <a target="_blank" href="/informatsija__politika_obrabotki_dannyh/">политики конфиденциальности</a>
+                  </label>
+                        <p class="c-red" id="error_consent"></p>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" name="consent_2" value="True"/>Я выражаю <a target="_blank" href="/soglasie-na-obrabotku-personalnyh-dannyh/">согласие на обработку персональных данных</a>
+                  </label>
+                  <p class="c-red" id="error_consent_2"></p>
+                </div>
+              </div>
+              <button type="button" id="btn_order_get_price" class="btn btn-block btn-pkf" onclick="document.getElementById('btn_order_get_price').disabled = true; send_form_get_price();">Запросить цену</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div> {% endcomment %}
+
+
+        
+<div id="modal-price-request" tabindex="-1" role="dialog" aria-hidden="true" class="modal">
+  <div class="modal-dialog modal-dialog_buy">
+    <div class="modal-content">
+      <div class="modal-header">
+          <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+        <div class="clearfix"></div>
+        <div class="modal-title text-center">Узнать цену</div>
+        <div class="modal-description text-center" id="get_price_name"></div>
+      </div>
+      <div class="modal-body">
+
+        <form method="post" id="get-price-form" class="ajax-form" action="{% url 'menu:send_form_order' %}">
+            {% csrf_token %}
+            
+            <input type="hidden" name="submit_check_get_price" value="checkout_get_price"/>
+            <input name="robot" type="hidden" class="myinput" value=""/>
+            <input name="text" type="hidden" value="Запрос цены"/>
+            <input type="hidden" name="product_slug" id="get_price_slug" value=""/>
+
+          <div class="form-group has-feedback">
+            <input type="text" name="name" placeholder="Ваше имя..." class="form-control"/>
+            <p class="c-red" id="error_get_price_name"></p>
+          </div>
+          <div class="form-group has-feedback">
+            <input type="text" name="phone" placeholder="Ваш телефон..." class="form-control"/>
+            <p class="c-red" id="error_get_price_phone"></p>
+          </div>
+          <div class="form-group has-feedback">
+            <input type="text" name="email" placeholder="Ваш e-mail..." class="form-control"/>
+            <p class="c-red" id="error_get_price_email"></p>
+          </div>
+            <div class="personal-data">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="consent" value="True"/>Я принимаю условия <a target="_blank" href="/informatsija__politika_obrabotki_dannyh/">политики конфиденциальности</a>
+              </label>
+              <p class="c-red" id="error_consent"></p>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="consent_2" value="True"/>Я выражаю <a target="_blank" href="/soglasie-na-obrabotku-personalnyh-dannyh/">согласие на обработку персональных данных</a>
+              </label>
+              <p class="c-red" id="error_consent_2"></p>
+            </div>
+          </div>
+
+          <button type="submit" id="btn_order_get_price" class="btn btn-block btn-pkf">Запросить цену</button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+  

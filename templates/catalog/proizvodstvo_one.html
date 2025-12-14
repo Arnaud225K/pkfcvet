@@ -1,0 +1,153 @@
+{% extends "catalog.html" %}
+{% block content %}
+     <div class="bg-gray m-b-30">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <ol class="breadcrumb">
+              <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/" itemprop="item"><span itemprop="name">Главная</span></a><meta itemprop="position" content="1"></li>
+                {% if current_menu %}
+                  {% if current_menu.parent %}
+                          {% if current_menu.parent.parent %}
+                            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ current_menu.parent.parent.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ current_menu.parent.parent.name }}</span></a><meta itemprop="position" content="2"></li>
+                          {% endif %}
+
+                        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ current_menu.parent.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ current_menu.parent.name }}</span></a><meta itemprop="position" content="{% if current_menu.parent.parent %}3{% else %}2{% endif %}"></li>
+                  {% endif %}
+                    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ current_menu.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ current_menu.name }}</span></a><meta itemprop="position" content="{% if current_menu.parent.parent %}4{% elif current_menu.parent %}3{% else %}2{% endif %}"></li>
+                {% endif %}
+              <li class="active" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name">{{ product.name_main }}</span><meta itemprop="position" content="{% if current_menu.parent.parent %}5{% elif current_menu.parent %}4{% else %}3{% endif %}"></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+   <!-- Services content-->
+    <div class="services-content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="heading-undelined">{{ product.name_main }}</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="services-item">
+            <div class="col-sm-12 col-md-4 ib-col">
+              <div class="services-img"><img src="{{ MEDIA_URL }}{{ product.image }}" loading="lazy" alt="{{ product.name_main }}" class="img-responsive"></div>
+            </div>
+            <div class="col-sm-12 col-md-8 ib-col">
+              <div class="services-description">
+                <p>
+
+                </p>
+              </div>
+                <a href="#modal-buy" data-toggle="modal" class="btn btn-pkf" onclick="{{ button_opros_emkosti|safe }}
+                    add_to_cart();
+                        ">Заказать услугу</a>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-12 col-md-4">
+            <div class="questionnaire-download">
+              <div class="title-questionnaire">Опросный лист для заказа резервуаров и емкостей:</div>
+              <div class="media">
+                <div class="media-left"><i aria-hidden="true" class="fa fa-file-text-o"></i></div>
+                <div class="media-body"><a href="/emkosti.zip" onclick="{{ button_opros_list_emkosti|safe }}">Скачать опросный лист</a>
+                  <p>
+                    Отправить заполненный опросный лист можно на
+                    <a href="mailto:{{ current_filial.email }}" class="email" onclick="{{ button_email_emkosti|safe }}">{{ current_filial.email }}</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="questionnaire-download">
+              <div class="title-questionnaire">Опросный лист для заказа деталей:</div>
+              <div class="media">
+                <div class="media-left"><i aria-hidden="true" class="fa fa-file-text-o"></i></div>
+                <div class="media-body"><a href="/Opros_doc.doc" download onclick="{{ button_opros_list_detali|safe }}">Скачать опросный лист</a>
+                  <p>
+                    Отправить заполненный опросный лист можно на
+                    <a href="mailto:{{ current_filial.email }}" class="email" onclick="{{ button_email_detali|safe }}">{{ current_filial.email }}</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-8">
+            <div class="row">
+              <div class="col-md-12">
+                <h2>{{ product.name_main }} {{ current_filial.name }}</h2>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="category-description">
+                    {{ product.description|safe }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end Services content-->
+    <!-- Callback services-->
+        {% include "sys/callback_manager.html" %}
+    <!-- end Callback services-->
+    <!-- Other production-->
+     {% if proizvodsctvo_main_list %}
+        <div class="section other-category">
+          <div class="other-category__production">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="h3">Наше производство</div>
+                </div>
+              </div>
+              <div class="row">
+                  {% for item in proizvodsctvo_main_list %}
+                    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 ib-col"><a href="{{ item.get_absolute_url }}">
+                        <div class="thumbnail">
+                          <div class="thumbnail-img"><img src="{{ MEDIA_URL }}{{ item.image }}" loading="lazy" alt="{{ item.name }}" class="img-responsive"></div>
+                          <div class="thumbnail-description">
+                            <h4>{{ item.name }}</h4>
+                          </div>
+                        </div></a>
+                    </div>
+                  {% endfor %}
+
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endif %}
+    <!-- end Other production-->
+    <!-- Other services background gray-->
+    {% if usluga_main_list %}
+        <div class="section other-category bg-gray">
+          <div class="other-category__services">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="h3">Наши услуги</div>
+                </div>
+              </div>
+              <div class="row">
+                  {% for item in usluga_main_list %}
+                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 ib-col"><a href="{{ item.get_absolute_url }}">
+                            <div class="thumbnail">
+                              <div class="thumbnail-img"><img src="{{ MEDIA_URL }}{{ item.image }}" loading="lazy" alt="{{ item.name }}" class="img-responsive"></div>
+                              <div class="thumbnail-description">
+                                <h4>{{ item.name }}</h4>
+                              </div>
+                            </div></a></div>
+                  {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endif %}
+    <!-- end Other services background gray-->
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "catalog.html" %}
+{% load catalog_filters %}
+{% block content %}
+    <!-- news.html -->
+
+    {% if art_one %}
+        {% include "sys/articles_one.html" %}
+    {% else %}
+        {% include "sys/articles_all.html" %}
+    {% endif %}
+
+
+{% endblock %}

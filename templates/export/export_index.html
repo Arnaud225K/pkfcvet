@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ПО ПКФ Цвет - экспорт</title>
+</head>
+<body>
+<form method="post" action="/catalog_export/">{% csrf_token %}
+    <select name="select_type">
+    {% for item in category|dictsort:'name' %}
+        <option value="{{ item.id }}">{{ item }}</option>
+    {% endfor %}
+    </select>
+    <input type="submit" name="submit" value="Экспорт"/>
+</form>
+</body>
+</html>

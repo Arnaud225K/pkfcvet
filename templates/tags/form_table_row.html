@@ -1,0 +1,30 @@
+{#<tr>#}
+{#    <th>#}
+{#        {% if form_field.field.required %}*{% endif %}#}
+{#        {{ form_field.label_tag }}#}
+{#    </th>#}
+{#    <td>#}
+{#        {% if form_field.errors %}#}
+{#            <ul class="errorlist">#}
+{#                {% for error in form_field.errors %}#}
+{#                    <li>{{ form_field.label }}: {{ error }}</li>#}
+{#                {% endfor %}#}
+{#            </ul>#}
+{#        {% endif %}#}
+{#        {{ form_field }}#}
+{#    </td>#}
+{#</tr>#}
+{#<div class="div_input_td_l">#}
+{% if form_field.errors %}
+            <ul class="errorlist">
+                {% for error in form_field.errors %}
+                    <p class="c-red">*{{ form_field.label }}: {{ error }}</p>
+                {% endfor %}
+            </ul>
+{% endif %}
+{#<div>#}
+{#{{ form_field.label_tag }}{% if form_field.field.required %}*{% endif %}#}
+{# {{ form_field }}#}
+{#</div>#}
+{#    <input type="search" class="div_input" placeholder="{{ form_field.label_tag }}{% if form_field.field.required %}*{% endif %}" name="name">#}
+{#</div>#}
